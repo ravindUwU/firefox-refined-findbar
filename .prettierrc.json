@@ -1,0 +1,17 @@
+{
+	"printWidth": 120,
+	"singleQuote": true,
+	"proseWrap": "always",
+	"endOfLine": "auto",
+	"overrides": [
+		{
+			"files": [".vscode/*.json"],
+			"options": {
+				"parser": "json5",
+				"trailingComma": "all",
+				"quoteProps": "preserve",
+				"singleQuote": false
+			}
+		}
+	]
+}

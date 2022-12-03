@@ -1,0 +1,8 @@
+{
+	"recommendations": [
+		"EditorConfig.EditorConfig",
+		"syler.sass-indented",
+		"esbenp.prettier-vscode",
+		"ms-vscode.powershell",
+	],
+}
