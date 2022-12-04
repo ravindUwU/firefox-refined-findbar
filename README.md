@@ -3,6 +3,8 @@
 `userChrome.css` styles that refine the Firefox find bar by repositioning it, adjusting spacing,
 re-styling internal elements.
 
+> **Note** Tested on Firefox 100-108.
+
 <br>
 
 ## Features
