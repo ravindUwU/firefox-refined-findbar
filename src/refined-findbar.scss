@@ -3,20 +3,11 @@
 
 // #region Features
 
-/// If `true`, makes the findbar float above the webpage. If `false` docks the findbar to the toolbar
-/// along the top of the browser window.
 $feature-floating: true !default;
-
-/// Vertical alignment of the floating findbar. Either `top` or `bottom`.
 $feature-floating-alignment: bottom !default;
-
-/// Distance between the floating findbar and the corresponding window corner.
 $feature-floating-distance: 18px !default;
 
-/// If `true`, styles checkboxes of the findbar to resemble buttons.
 $feature-buttons: true !default;
-
-/// If `true`, groups controls of the findbar together.
 $feature-buttons-grouped: true !default;
 
 // #endregion
