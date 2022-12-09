@@ -115,13 +115,9 @@ findbar {
 		htmlNs|input {
 			@extend %bordered-control;
 
-			@if $feature-buttons {
-				@if $feature-buttons-grouped {
-					border-top-right-radius: 0 !important;
-					border-bottom-right-radius: 0 !important;
-				} @else {
-					margin-inline-end: $space-unit !important;
-				}
+			@if $feature-buttons and $feature-buttons-grouped {
+				border-top-right-radius: 0 !important;
+				border-bottom-right-radius: 0 !important;
 			}
 		}
 
