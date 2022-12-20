@@ -1,13 +1,5 @@
 # Contributing
 
-Learn more about `userChrome.css` at,
-
-- https://kb.mozillazine.org/UserChrome.css
-- https://old.reddit.com/r/firefox/wiki/userchrome
-- https://old.reddit.com/r/FirefoxCSS/wiki/index/tutorials
-
-<br>
-
 ## Tools
 
 - [Yarn](https://yarnpkg.com/) package manager.
@@ -16,7 +8,7 @@ Learn more about `userChrome.css` at,
   [workspace configuration](./.vscode/) that configures VSCode to invoke
   [Prettier](https://prettier.io/) to upon save.
 
-  If you choose to use a different text-editor, please ensure that it is
+  If you choose to use a different text editor, please ensure that it is
   [EditorConfig](https://editorconfig.org/)-compliant, and run the `pretty:*` tasks before
   committing your changes.
 

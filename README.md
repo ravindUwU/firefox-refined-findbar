@@ -1,9 +1,12 @@
 # Refined Find bar for Firefox
 
-`userChrome.css` styles that refine the Firefox find bar by repositioning it, adjusting spacing,
-re-styling internal elements.
+`userChrome.css`[^userchrome] styles that refine the Firefox find bar by repositioning it, adjusting
+spacing, re-styling internal elements.
 
-> **Note** Tested on Firefox 100-108.
+[^userchrome]:
+    Learn more about `userChrome.css` at: https://kb.mozillazine.org/UserChrome.css,
+    https://old.reddit.com/r/firefox/wiki/userchrome,
+    https://old.reddit.com/r/FirefoxCSS/wiki/index/tutorials
 
 <br>
 
@@ -84,9 +87,9 @@ This style is written in [SCSS](https://sass-lang.com/) and therefore must be tr
 before being added to `userChrome.css`. There are several ways to go about this,
 
 - **To use an online tool like [SassMeister](https://www.sassmeister.com/)**, copy the contents of
-  [`refined-findbar.scss`](./src/refined-findbar.scss) to its SCSS pane, and override variables as
-  necessary. The CSS transpilation will appear on the right-hand side; paste it in your
-  `userChrome.css` file.
+  [`refined-findbar.scss`](./src/refined-findbar.scss) to its SCSS pane on the left-hand side, and
+  override variables as necessary. The CSS transpilation will appear on the right-hand side; paste
+  it in your `userChrome.css` file.
 
   ![](./img/sassmeister.png)
 
