@@ -2,7 +2,7 @@
 
 ## Tools
 
-- [Yarn](https://yarnpkg.com/) package manager.
+- [PNPM](https://pnpm.io/) package manager.
 
 - [VSCode](https://code.visualstudio.com/) text editor. The repo includes a
   [workspace configuration](./.vscode/) that configures VSCode to invoke
