@@ -1,7 +1,7 @@
 {
 	"recommendations": [
 		"EditorConfig.EditorConfig",
-		"syler.sass-indented",
+		"SomewhatStationery.some-sass",
 		"esbenp.prettier-vscode",
 		"ms-vscode.powershell",
 	],
