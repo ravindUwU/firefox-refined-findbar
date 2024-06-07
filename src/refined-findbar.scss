@@ -1,7 +1,4 @@
-@namespace url('http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul');
-@namespace htmlNs url('http://www.w3.org/1999/xhtml');
-
-// #region Features
+// Features
 
 $feature-floating: true !default;
 $feature-floating-alignment: bottom !default;
@@ -10,40 +7,118 @@ $feature-floating-distance: 18px !default;
 $feature-buttons: true !default;
 $feature-buttons-grouped: true !default;
 
-// #endregion
+// Style
 
-$space-unit: 8px;
-
-%bordered-control {
-	border: 1px solid ThreeDShadow;
-}
+@namespace url('http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul');
+@namespace htmlNs url('http://www.w3.org/1999/xhtml');
 
 findbar {
-	position: absolute;
+	$space-unit: 8px;
+
 	contain: content;
 	border: 1px solid var(--chrome-content-separator-color);
 
+	/* Position */
+
+	// The findbar sits in a relatively positioned a vbox.browserContainer, so we're free to
+	// absolutely position the findbar within it.
+	position: absolute;
+
 	@if $feature-floating {
+		// The floating findbar can be top or bottom aligned.
 		right: $feature-floating-distance;
 		#{$feature-floating-alignment}: $feature-floating-distance;
 		transform-origin: #{$feature-floating-alignment} center;
+
 		border-radius: var(--toolbarbutton-border-radius);
 	} @else {
-		border-bottom-left-radius: var(--toolbarbutton-border-radius);
-		border-bottom-right-radius: var(--toolbarbutton-border-radius);
-		border-top-width: 0 !important;
+		// The non-floating findbar is always top-aligned, but move it up by 1px to "merge" it with
+		// the rest of the chrome.
 		top: -1px;
 		right: 44px;
 		transform-origin: top center;
+
+		border-bottom-left-radius: var(--toolbarbutton-border-radius);
+		border-bottom-right-radius: var(--toolbarbutton-border-radius);
+		border-top-width: 0 !important;
 	}
 
-	animation: 0.1s keyframes-scale-in;
+	/* Animation */
+
+	// Scale in when shown, out when hidden.
+
+	@keyframes findbar-scale-in {
+		0% {
+			transform: scaleY(0);
+		}
+		100% {
+			transform: scaleY(1);
+		}
+	}
+
+	@keyframes findbar-scale-out {
+		0% {
+			transform: scaleY(1);
+		}
+		100% {
+			transform: scaleY(0);
+		}
+	}
+
+	animation: 0.1s findbar-scale-in;
 
 	&[hidden='true'] {
-		animation: 0.1s keyframes-scale-out;
+		animation: 0.1s findbar-scale-out;
 	}
 
+	%bordered-control {
+		border: 1px solid ThreeDShadow;
+	}
+
+	/* Text box */
+
+	[anonid='findbar-textbox-wrapper'] {
+		margin-inline-end: $space-unit * if($feature-buttons, 1, 2) !important;
+
+		htmlNs|input {
+			@extend %bordered-control;
+
+			@if $feature-buttons and $feature-buttons-grouped {
+				border-top-right-radius: 0 !important;
+				border-bottom-right-radius: 0 !important;
+			}
+		}
+
+		/* Previous & next result buttons */
+
+		toolbarbutton {
+			@extend %bordered-control;
+
+			color: var(--button-color);
+			background-color: var(--button-bgcolor);
+			border-width: 1px !important;
+
+			// The previous & next buttons have left & right margins respectively, by default.
+			// Remove them to merge the buttons with the text box.
+			margin-inline: 0 !important;
+
+			@if $feature-buttons and $feature-buttons-grouped {
+				&:last-of-type {
+					border-top-left-radius: 0 !important;
+					border-bottom-left-radius: 0 !important;
+				}
+				&:not(:last-of-type) {
+					border-radius: 0 !important;
+					border-right-width: 0 !important;
+				}
+			}
+		}
+	}
+
+	/* Checkboxes */
+
 	checkbox {
+		// The checkboxes have horizontal margins by default. Remove them so that they stick together.
 		margin: 0 !important;
 
 		@if $feature-buttons {
@@ -62,6 +137,8 @@ findbar {
 					border-left-width: 0;
 				}
 			} @else {
+				// Space out consecutive checkboxes from each other if the buttons shouldn't be
+				// grouped together.
 				&:not(:first-of-type) {
 					margin-inline-start: $space-unit !important;
 				}
@@ -103,70 +180,25 @@ findbar {
 				display: none;
 			}
 		} @else {
+			// Space out consecutive checkboxes from each other.
 			&:not(:first-of-type) {
 				margin-inline-start: $space-unit !important;
 			}
 		}
 	}
 
-	[anonid='findbar-textbox-wrapper'] {
-		margin-inline-end: $space-unit * if($feature-buttons, 1, 2) !important;
+	/* Labels */
 
-		htmlNs|input {
-			@extend %bordered-control;
-
-			@if $feature-buttons and $feature-buttons-grouped {
-				border-top-right-radius: 0 !important;
-				border-bottom-right-radius: 0 !important;
-			}
-		}
-
-		toolbarbutton {
-			@extend %bordered-control;
-
-			color: var(--button-color);
-			background-color: var(--button-bgcolor);
-			border-width: 1px !important;
-
-			margin-inline: 0 !important;
-
-			@if $feature-buttons and $feature-buttons-grouped {
-				&:last-of-type {
-					border-top-left-radius: 0 !important;
-					border-bottom-left-radius: 0 !important;
-				}
-				&:not(:last-of-type) {
-					border-radius: 0 !important;
-					border-right-width: 0 !important;
-				}
-			}
-		}
-	}
-
-	.findbar-label {
+	label.findbar-label {
+		// Remove default horizontal margins of labels, then space them out consistently.
 		margin: 0 !important;
 		margin-inline-start: $space-unit !important;
 	}
 
+	/* Description */
+
+	// Hide empty description element.
 	description.findbar-label:empty {
 		display: none;
-	}
-}
-
-@keyframes keyframes-scale-in {
-	0% {
-		transform: scaleY(0);
-	}
-	100% {
-		transform: scaleY(1);
-	}
-}
-
-@keyframes keyframes-scale-out {
-	0% {
-		transform: scaleY(1);
-	}
-	100% {
-		transform: scaleY(0);
 	}
 }
