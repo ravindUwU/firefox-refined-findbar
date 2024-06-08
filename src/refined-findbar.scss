@@ -84,12 +84,16 @@ findbar {
 			@extend %bordered-control;
 
 			@if $feature-buttons and $feature-buttons-grouped {
-				border-top-right-radius: 0 !important;
-				border-bottom-right-radius: 0 !important;
+				// Remove border radii along the right edge to merge the text box with the prev &
+				// next buttons, if the findbar isn't opened in quick find mode.
+				&:not(.minimal) {
+					border-top-right-radius: 0 !important;
+					border-bottom-right-radius: 0 !important;
+				}
 			}
 		}
 
-		/* Previous & next result buttons */
+		/* Previous & next buttons. Hidden if the findbar is opened in quick find mode. */
 
 		toolbarbutton {
 			@extend %bordered-control;
