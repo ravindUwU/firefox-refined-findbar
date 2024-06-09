@@ -3,11 +3,13 @@
 	"scripts": {
 		"build": "sass ./src/refined-findbar.scss:./dist/refined-findbar.css --no-source-map --no-error-css",
 		"watch": "pnpm run build -w",
+		"site": "http-server",
 		"clean": "rimraf ./dist",
 		"pretty:check": "prettier -c .",
 		"pretty:write": "prettier -w ."
 	},
 	"devDependencies": {
+		"http-server": "^14.1.1",
 		"prettier": "^3.3.1",
 		"rimraf": "^5.0.7",
 		"sass": "^1.77.4"

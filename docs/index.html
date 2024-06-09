@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<style>
+			html,
+			body,
+			pre {
+				margin: 0;
+				padding: 0;
+			}
+
+			body {
+				padding: 3rem;
+				font-family: sans-serif;
+				max-width: 600px;
+			}
+
+			@media (prefers-color-scheme: dark) {
+				body {
+					background-color: #222;
+					color: #fff;
+				}
+			}
+
+			main {
+				display: flex;
+				flex-direction: column;
+				gap: 6px;
+			}
+
+			a {
+				color: inherit;
+			}
+		</style>
+	</head>
+
+	<body>
+		<main id="main">
+			<div>
+				<a href="https://github.com/ravindUwU/firefox-refined-findbar">
+					&larr; Back to Repository
+				</a>
+				<p>
+					This page fetches the refined find bar mixin, adds a corresponding
+					<code>@include</code> rule its with default arguments, and generates a link to open it in
+					the
+					<a href="https://sass-lang.com/playground/" style="color: #cf649a">Sass playground</a>.
+				</p>
+				<br />
+			</div>
+		</main>
+
+		<script src="https://cdn.jsdelivr.net/npm/pako@2.1.0/dist/pako.min.js"></script>
+		<script>
+			const mainEl = document.querySelector('main');
+
+			function log(html) {
+				const el = document.createElement('div');
+				el.innerHTML = html;
+				mainEl.appendChild(el);
+			}
+
+			(async () => {
+				const jsonError = Symbol();
+
+				try {
+					// Fetch mixin.
+					log('Fetching mixin...');
+
+					const res = await fetch(
+						window.location.hostname === 'localhost'
+							? `../src/refined-findbar.scss?t=${Date.now()}`
+							: 'https://raw.githubusercontent.com/ravindUwU/firefox-refined-findbar/main/src/refined-findbar.scss',
+					);
+
+					if (res.status !== 200) {
+						throw {
+							[jsonError]: true,
+							type: 'NO_RESPONSE',
+							url: res.url,
+							status: res.status,
+							statusText: res.statusText,
+						};
+					}
+
+					// Replace '\r's just in case.
+					let scss = await res.text();
+					scss = scss.replace(/\r/g, '');
+
+					// Find mixin signature.
+					log('Locating signature...');
+
+					const START_MARKER = '/* sig:start */';
+					const END_MARKER = '/* sig:end */';
+					const startIdx = scss.indexOf(START_MARKER);
+					const endIdx = scss.indexOf(END_MARKER);
+
+					if (startIdx === -1 || endIdx === -1) {
+						throw {
+							[jsonError]: true,
+							type: 'NO_MARKER',
+							startIdx,
+							endIdx,
+						};
+					}
+
+					const sig = scss
+						.substring(startIdx + START_MARKER.length, endIdx)
+						.trim()
+						.replace(/^\t/gm, '');
+
+					// Make playground SCSS, which is the just contents of the mixin, followed by
+					// @include-ing the mixin with its default signature.
+					const playScss = [
+						scss,
+						'// TODO: Continue from here. Modify the following @include rule as necessary.',
+						`@include ${sig};`,
+						'',
+					].join('\n');
+
+					log('Making playground URL...');
+
+					// The URL includes the playground contents encoded into the location hash:
+					// https://github.com/sass/sass-site/blob/eaa021fcad7fcd04956bb4efbee03e1356c52480/source/assets/js/playground.ts#L239-L242
+					// https://github.com/sass/sass-site/blob/eaa021fcad7fcd04956bb4efbee03e1356c52480/source/assets/js/playground/utils.ts#L11-L37
+
+					function stateToBase64(state) {
+						const inputFormatChar = state.inputFormat === 'scss' ? 1 : 0;
+						const outputFormatChar = state.outputFormat === 'expanded' ? 1 : 0;
+						const persistedState = `${inputFormatChar}${outputFormatChar}${state.inputValue}`;
+						return deflateToBase64(persistedState);
+					}
+
+					function deflateToBase64(input) {
+						const deflated = pako.deflate(input);
+						return btoa(String.fromCharCode(...deflated));
+					}
+
+					const playUrl = `https://sass-lang.com/playground/#${stateToBase64({
+						inputFormat: 'scss',
+						outputFormat: 'expanded',
+						inputValue: playScss,
+					})}`;
+
+					log(`
+						<br>
+						<strong>Click <a href="${playUrl}">here</a> to continue &rarr;</strong>
+					`);
+				} catch (e) {
+					let detail = null;
+					if (jsonError in e) {
+						detail = JSON.stringify(e, undefined, '    ');
+					} else if (e instanceof Error) {
+						detail = `${e.name} - ${e.message} with stack: ${e.stack}`;
+					} else {
+						console.error(e);
+						detail = 'Logged details to the browser console.';
+					}
+
+					log(`
+						<div>
+							<div>
+								<span style="color: red">
+									An error occured.
+
+									Please refer to the
+									<a href="https://github.com/ravindUwU/firefox-refined-findbar?tab=readme-ov-file#usage">README</a>
+									for alternative ways to transpile refined find bar to CSS.
+
+									If this hasn't already been reported, please consider creating an
+									<a href="https://github.com/ravindUwU/firefox-refined-findbar/issues">issue</a>.
+								</span>
+							</div>
+							<div>
+								<pre style="margin-left: 2rem">${detail}</pre>
+							</div>
+						</div>
+					`);
+				}
+			})();
+		</script>
+	</body>
+</html>

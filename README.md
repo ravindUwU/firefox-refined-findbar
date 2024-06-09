@@ -113,33 +113,50 @@ e.g., If the order is specified as `DESCRIPTION`, `LABELS`, `TEXT_BOX`, `CHECKBO
 
 ## Usage
 
-This style is authored as an [SCSS mixin][sassMixin] and must be transpiled to CSS before use. **The
-quickest way to get started** is to use an online Sass transpiler like
-[Sass Playground](https://sass-lang.com/playground/) or [SassMeister](https://www.sassmeister.com/).
+This style is authored as an [SCSS mixin][sassMixin] and must be transpiled to CSS before use. An
+online Sass transpiler can be used for this purpose.
 
-1. Copy the contents of [`refined-findbar.scss`][src] to its SCSS pane.
-2. Add the line `@include refined-findbar()` after the copied contents, and override variables as
-   necessary. The default values can be found in the `@mixin refined-findbar` declaration near the
-   top of the copied contents.
+- **The quickest way to get started** is to,
 
-   ```scss
-   // <contents of refined-findbar.scss>
+  1. Visit https://ravindUwU.github.io/firefox-refined-findbar, which automatically generates a link
+     to the [Sass Playground][sassPlay].
 
-   // prettier-ignore
-   @include refined-findbar(
-       $float: true,
-       $float-alignment: top,
-       // etc..
-   );
-   ```
+  1. Visit the link, modify the SCSS as necessary (specifically, the `@include refined-findbar(...)`
+     statement), and copy the CSS output into your `userChrome.css` file.
 
-3. Copy the CSS output into your `userChrome.css` file.
+  <details>
+  <summary>If that didn't work,</summary>
 
-**To transpile locally**, [`@use`][sassUse] the [`refined-findbar.scss`][src] file,
-[`@include`][sassMixin] the mixin changing any variables as necessary, and use [`sass`][npmSass] to
-transpile to CSS.
+  1. Open an online transpiler (e.g., the [Sass Playground][sassPlay] or
+     [SassMeister](https://www.sassmeister.com/)).
+
+  2. Copy the contents of [`refined-findbar.scss`][src] to its SCSS pane.
+
+  3. Add the line `@include refined-findbar()` after the copied contents, and override variables as
+     necessary. The default values can be found in the `@mixin refined-findbar` declaration near the
+     top of the copied contents.
+
+     ```scss
+     // <contents of refined-findbar.scss>
+
+     // prettier-ignore
+     @include refined-findbar(
+         $float: true,
+         $float-alignment: top,
+         // etc..
+     );
+     ```
+
+  4. Copy the CSS output into your `userChrome.css` file.
+
+  </details>
+
+- **To transpile locally**, [`@use`][sassUse] the [`refined-findbar.scss`][src] file,
+  [`@include`][sassMixin] the mixin changing any variables as necessary, and use [`sass`][npmSass]
+  to transpile to CSS.
 
 [src]: ./src/refined-findbar.scss
 [sassUse]: https://sass-lang.com/documentation/at-rules/use/
 [sassMixin]: https://sass-lang.com/documentation/at-rules/mixin/
+[sassPlay]: https://sass-lang.com/playground/
 [npmSass]: https://www.npmjs.com/package/sass

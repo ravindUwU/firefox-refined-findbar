@@ -9,24 +9,26 @@ $-checkbox-selectors: (
 	CHECKBOX_WHOLE_WORDS: "checkbox[anonid='find-entire-word']",
 );
 
-@mixin refined-findbar(
-	$float: true,
-	$float-alignment: bottom,
-	$float-distance: 18px,
+@mixin /* sig:start */
+	refined-findbar(
+		$float: true,
+		$float-alignment: bottom,
+		$float-distance: 18px,
 
-	$buttons: true,
-	$buttons-grouped: true,
+		$buttons: true,
+		$buttons-grouped: true,
 
-	$order: (
-		TEXT_BOX,
-		CHECKBOX_HIGHLIGHT_ALL,
-		CHECKBOX_MATCH_CASE,
-		CHECKBOX_MATCH_DIACRITICS,
-		CHECKBOX_WHOLE_WORDS,
-		LABELS,
-		DESCRIPTION,
+		$order: (
+			TEXT_BOX,
+			CHECKBOX_HIGHLIGHT_ALL,
+			CHECKBOX_MATCH_CASE,
+			CHECKBOX_MATCH_DIACRITICS,
+			CHECKBOX_WHOLE_WORDS,
+			LABELS,
+			DESCRIPTION,
+		)
 	)
-) {
+	/* sig:end */ {
 	@namespace url('http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul');
 	@namespace htmlNs url('http://www.w3.org/1999/xhtml');
 
