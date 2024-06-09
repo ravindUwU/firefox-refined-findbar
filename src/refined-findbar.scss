@@ -37,6 +37,7 @@ $-checkbox-selectors: (
 
 		contain: content;
 		border: 1px solid var(--chrome-content-separator-color);
+		padding-inline-start: math.div($space-unit, 3);
 
 		/* Position */
 
