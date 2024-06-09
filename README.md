@@ -130,7 +130,7 @@ online Sass transpiler can be used for this purpose.
   1. Open an online transpiler (e.g., the [Sass Playground][sassPlay] or
      [SassMeister](https://www.sassmeister.com/)).
 
-  2. Copy the contents of [`refined-findbar.scss`][src] to its SCSS pane.
+  2. Copy the contents of [`refined-findbar.scss`][src] to the SCSS pane.
 
   3. Add the line `@include refined-findbar()` after the copied contents, and override variables as
      necessary. The default values can be found in the `@mixin refined-findbar` declaration near the

@@ -97,7 +97,7 @@ $-checkbox-selectors: (
 		}
 
 		// Findbar controls live within an hbox.findbar-container, which is a flex parent. Remove
-		// horizontal margins of its direct descendants and space them out evenly using gap.
+		// horizontal margins of direct descendants and space them out evenly using gap.
 		.findbar-container {
 			& > * {
 				margin-inline-start: 0 !important;
