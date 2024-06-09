@@ -76,6 +76,22 @@ If `true`, groups find bar buttons together.
 
 </td>
 </tr>
+<tr>
+<td valign="top"><code>$feature-order</code></td>
+<td valign="top">
+
+Reorders elements of the find bar. This is a list (comma-separated values) that contains all of the
+following values (listed in the default order), in any order: `TEXT_BOX`, `CHECKBOX_HIGHLIGHT_ALL`,
+`CHECKBOX_MATCH_CASE`, `CHECKBOX_MATCH_DIACRITICS`, `CHECKBOX_WHOLE_WORDS`, `LABELS`, `DESCRIPTION`.
+
+For example, if the items are re-ordered to `DESCRIPTION`, `LABELS`, `TEXT_BOX`,
+`CHECKBOX_HIGHLIGHT_ALL`, `CHECKBOX_MATCH_CASE`, `CHECKBOX_WHOLE_WORDS`,
+`CHECKBOX_MATCH_DIACRITICS`,
+
+![](./img/feature-buttons-order.png)
+
+</td>
+</tr>
 </tbody>
 </table>
 

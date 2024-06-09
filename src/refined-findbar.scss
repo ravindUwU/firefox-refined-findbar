@@ -1,3 +1,24 @@
+@use 'sass:list';
+@use 'sass:math';
+@use 'sass:map';
+
+$-default-order: (
+	TEXT_BOX,
+	CHECKBOX_HIGHLIGHT_ALL,
+	CHECKBOX_MATCH_CASE,
+	CHECKBOX_MATCH_DIACRITICS,
+	CHECKBOX_WHOLE_WORDS,
+	LABELS,
+	DESCRIPTION
+);
+
+$-checkbox-selectors: (
+	CHECKBOX_HIGHLIGHT_ALL: "checkbox[anonid='highlight']",
+	CHECKBOX_MATCH_CASE: "checkbox[anonid='find-case-sensitive']",
+	CHECKBOX_MATCH_DIACRITICS: "checkbox[anonid='find-match-diacritics']",
+	CHECKBOX_WHOLE_WORDS: "checkbox[anonid='find-entire-word']",
+);
+
 // Features
 
 $feature-floating: true !default;
@@ -7,9 +28,9 @@ $feature-floating-distance: 18px !default;
 $feature-buttons: true !default;
 $feature-buttons-grouped: true !default;
 
-// Style
+$feature-order: $-default-order !default;
 
-@use 'sass:math';
+// Style
 
 @namespace url('http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul');
 @namespace htmlNs url('http://www.w3.org/1999/xhtml');
@@ -136,13 +157,29 @@ findbar {
 		@if $feature-buttons {
 			@extend %bordered-control;
 
+			// Restyle border thicknesses & radii of first & last checkboxes so they appear grouped
+			// together.
+
+			// The :first-of-type and :last-of-type pseudo-classes can't be used here because they
+			// follow the DOM order, and checkboxes might have been reordered via $feature-order.
+			// Instead, identify the first & last checkboxes via their corresponding keys in
+			// $feature-order.
+
+			$checkbox-by-index: ();
+			@each $name in map.keys($-checkbox-selectors) {
+				$checkbox-by-index: map.set($checkbox-by-index, list.index($feature-order, $name), $name);
+			}
+
+			$first-checkbox: map.get($checkbox-by-index, math.min(map.keys($checkbox-by-index)...));
+			$last-checkbox: map.get($checkbox-by-index, math.max(map.keys($checkbox-by-index)...));
+
 			@if $feature-buttons-grouped {
-				&:not(:last-of-type) {
+				&:not(#{map.get($-checkbox-selectors, $last-checkbox)}) {
 					border-top-right-radius: 0;
 					border-bottom-right-radius: 0;
 				}
 
-				&:not(:first-of-type) {
+				&:not(#{map.get($-checkbox-selectors, $first-checkbox)}) {
 					border-top-left-radius: 0;
 					border-bottom-left-radius: 0;
 					border-left-width: 0;
@@ -151,7 +188,7 @@ findbar {
 					margin-inline-start: -$space-unit !important;
 				}
 			} @else {
-				&:not(:first-of-type) {
+				&:not(#{map.get($-checkbox-selectors, $first-checkbox)}) {
 					// Move non-grouped buttons closer to each other.
 					margin-inline-start: -1 * math.div($space-unit, 2) !important;
 				}
@@ -159,7 +196,6 @@ findbar {
 
 			padding: 3px 6px;
 			border-radius: var(--toolbarbutton-border-radius);
-
 			color: var(--button-color);
 			background-color: var(--button-bgcolor);
 
@@ -200,5 +236,25 @@ findbar {
 	// Hide empty description element.
 	description.findbar-label:empty {
 		display: none;
+	}
+
+	/* Order */
+
+	[anonid='findbar-textbox-wrapper'] {
+		order: list.index($feature-order, TEXT_BOX) - 1;
+	}
+
+	@each $name, $selector in $-checkbox-selectors {
+		#{$selector} {
+			order: list.index($feature-order, $name) - 1;
+		}
+	}
+
+	label.findbar-label {
+		order: list.index($feature-order, LABELS) - 1;
+	}
+
+	description.findbar-label {
+		order: list.index($feature-order, DESCRIPTION) - 1;
 	}
 }
