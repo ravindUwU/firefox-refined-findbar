@@ -2,16 +2,6 @@
 @use 'sass:math';
 @use 'sass:map';
 
-$-default-order: (
-	TEXT_BOX,
-	CHECKBOX_HIGHLIGHT_ALL,
-	CHECKBOX_MATCH_CASE,
-	CHECKBOX_MATCH_DIACRITICS,
-	CHECKBOX_WHOLE_WORDS,
-	LABELS,
-	DESCRIPTION
-);
-
 $-checkbox-selectors: (
 	CHECKBOX_HIGHLIGHT_ALL: "checkbox[anonid='highlight']",
 	CHECKBOX_MATCH_CASE: "checkbox[anonid='find-case-sensitive']",
@@ -19,242 +9,248 @@ $-checkbox-selectors: (
 	CHECKBOX_WHOLE_WORDS: "checkbox[anonid='find-entire-word']",
 );
 
-// Features
+@mixin refined-findbar(
+	$float: true,
+	$float-alignment: bottom,
+	$float-distance: 18px,
 
-$feature-floating: true !default;
-$feature-floating-alignment: bottom !default;
-$feature-floating-distance: 18px !default;
+	$buttons: true,
+	$buttons-grouped: true,
 
-$feature-buttons: true !default;
-$feature-buttons-grouped: true !default;
+	$order: (
+		TEXT_BOX,
+		CHECKBOX_HIGHLIGHT_ALL,
+		CHECKBOX_MATCH_CASE,
+		CHECKBOX_MATCH_DIACRITICS,
+		CHECKBOX_WHOLE_WORDS,
+		LABELS,
+		DESCRIPTION,
+	)
+) {
+	@namespace url('http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul');
+	@namespace htmlNs url('http://www.w3.org/1999/xhtml');
 
-$feature-order: $-default-order !default;
+	findbar {
+		$space-unit: 12px;
 
-// Style
+		contain: content;
+		border: 1px solid var(--chrome-content-separator-color);
 
-@namespace url('http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul');
-@namespace htmlNs url('http://www.w3.org/1999/xhtml');
+		/* Position */
 
-findbar {
-	$space-unit: 12px;
+		// The findbar sits in a relatively positioned a vbox.browserContainer, so we're free to
+		// absolutely position the findbar within it.
+		position: absolute;
 
-	contain: content;
-	border: 1px solid var(--chrome-content-separator-color);
+		@if $float {
+			// Top or bottom align the floating findbar.
+			right: $float-distance;
+			#{$float-alignment}: $float-distance;
+			transform-origin: #{$float-alignment} center;
 
-	/* Position */
-
-	// The findbar sits in a relatively positioned a vbox.browserContainer, so we're free to
-	// absolutely position the findbar within it.
-	position: absolute;
-
-	@if $feature-floating {
-		// The floating findbar can be top or bottom aligned.
-		right: $feature-floating-distance;
-		#{$feature-floating-alignment}: $feature-floating-distance;
-		transform-origin: #{$feature-floating-alignment} center;
-
-		border-radius: var(--toolbarbutton-border-radius);
-	} @else {
-		// The non-floating findbar is always top-aligned, but move it up by 1px to "merge" it with
-		// the rest of the chrome.
-		top: -1px;
-		right: 44px;
-		transform-origin: top center;
-
-		border-bottom-left-radius: var(--toolbarbutton-border-radius);
-		border-bottom-right-radius: var(--toolbarbutton-border-radius);
-		border-top-width: 0 !important;
-	}
-
-	/* Animation */
-
-	// Scale in when shown, out when hidden.
-
-	@keyframes findbar-scale-in {
-		0% {
-			transform: scaleY(0);
-		}
-		100% {
-			transform: scaleY(1);
-		}
-	}
-
-	@keyframes findbar-scale-out {
-		0% {
-			transform: scaleY(1);
-		}
-		100% {
-			transform: scaleY(0);
-		}
-	}
-
-	animation: 0.1s findbar-scale-in;
-
-	&[hidden='true'] {
-		animation: 0.1s findbar-scale-out;
-	}
-
-	%bordered-control {
-		border: 1px solid ThreeDShadow;
-	}
-
-	// Findbar controls live within an hbox.findbar-container, which is a flex parent. Remove
-	// horizontal margins of its direct descendants and space them out evenly using gap.
-	.findbar-container {
-		& > * {
-			margin-inline-start: 0 !important;
-			margin-inline-end: 0 !important;
-		}
-
-		gap: $space-unit;
-	}
-
-	/* Text box */
-
-	[anonid='findbar-textbox-wrapper'] {
-		htmlNs|input {
-			@extend %bordered-control;
-
-			@if $feature-buttons and $feature-buttons-grouped {
-				// Remove border radii along the right edge to merge the text box with the prev &
-				// next buttons, if the findbar isn't opened in quick find mode.
-				&:not(.minimal) {
-					border-top-right-radius: 0 !important;
-					border-bottom-right-radius: 0 !important;
-				}
-			}
-		}
-
-		/* Previous & next buttons. Hidden if the findbar is opened in quick find mode. */
-
-		toolbarbutton {
-			@extend %bordered-control;
-
-			color: var(--button-color);
-			background-color: var(--button-bgcolor);
-			border-width: 1px !important;
-
-			// The previous & next buttons have left & right margins respectively, by default.
-			// Remove them to merge the buttons with the text box.
-			margin-inline: 0 !important;
-
-			@if $feature-buttons and $feature-buttons-grouped {
-				&:last-of-type {
-					border-top-left-radius: 0 !important;
-					border-bottom-left-radius: 0 !important;
-				}
-				&:not(:last-of-type) {
-					border-radius: 0 !important;
-					border-right-width: 0 !important;
-				}
-			}
-		}
-	}
-
-	/* Checkboxes */
-
-	checkbox {
-		@if $feature-buttons {
-			@extend %bordered-control;
-
-			// Restyle border thicknesses & radii of first & last checkboxes so they appear grouped
-			// together.
-
-			// The :first-of-type and :last-of-type pseudo-classes can't be used here because they
-			// follow the DOM order, and checkboxes might have been reordered via $feature-order.
-			// Instead, identify the first & last checkboxes via their corresponding keys in
-			// $feature-order.
-
-			$checkbox-by-index: ();
-			@each $name in map.keys($-checkbox-selectors) {
-				$checkbox-by-index: map.set($checkbox-by-index, list.index($feature-order, $name), $name);
-			}
-
-			$first-checkbox: map.get($checkbox-by-index, math.min(map.keys($checkbox-by-index)...));
-			$last-checkbox: map.get($checkbox-by-index, math.max(map.keys($checkbox-by-index)...));
-
-			@if $feature-buttons-grouped {
-				&:not(#{map.get($-checkbox-selectors, $last-checkbox)}) {
-					border-top-right-radius: 0;
-					border-bottom-right-radius: 0;
-				}
-
-				&:not(#{map.get($-checkbox-selectors, $first-checkbox)}) {
-					border-top-left-radius: 0;
-					border-bottom-left-radius: 0;
-					border-left-width: 0;
-
-					// Remove space between consecutive grouped buttons.
-					margin-inline-start: -$space-unit !important;
-				}
-			} @else {
-				&:not(#{map.get($-checkbox-selectors, $first-checkbox)}) {
-					// Move non-grouped buttons closer to each other.
-					margin-inline-start: -1 * math.div($space-unit, 2) !important;
-				}
-			}
-
-			padding: 3px 6px;
 			border-radius: var(--toolbarbutton-border-radius);
-			color: var(--button-color);
-			background-color: var(--button-bgcolor);
+		} @else {
+			// Top-align the non-floating findbar, move it up by 1px to "merge" it with the rest of
+			// the chrome.
+			top: -1px;
+			right: 44px;
+			transform-origin: top center;
 
-			&:hover {
-				background-color: var(--button-hover-bgcolor);
+			border-bottom-left-radius: var(--toolbarbutton-border-radius);
+			border-bottom-right-radius: var(--toolbarbutton-border-radius);
+			border-top-width: 0 !important;
+		}
+
+		/* Animation */
+
+		// Scale in when shown, out when hidden.
+
+		@keyframes findbar-scale-in {
+			0% {
+				transform: scaleY(0);
+			}
+			100% {
+				transform: scaleY(1);
+			}
+		}
+
+		@keyframes findbar-scale-out {
+			0% {
+				transform: scaleY(1);
+			}
+			100% {
+				transform: scaleY(0);
+			}
+		}
+
+		animation: 0.1s findbar-scale-in;
+
+		&[hidden='true'] {
+			animation: 0.1s findbar-scale-out;
+		}
+
+		%bordered-control {
+			border: 1px solid ThreeDShadow;
+		}
+
+		// Findbar controls live within an hbox.findbar-container, which is a flex parent. Remove
+		// horizontal margins of its direct descendants and space them out evenly using gap.
+		.findbar-container {
+			& > * {
+				margin-inline-start: 0 !important;
+				margin-inline-end: 0 !important;
 			}
 
-			&:active {
-				background-color: var(--button-active-bgcolor);
+			gap: $space-unit;
+		}
+
+		/* Text box */
+
+		[anonid='findbar-textbox-wrapper'] {
+			htmlNs|input {
+				@extend %bordered-control;
+
+				@if $buttons and $buttons-grouped {
+					// Remove border radii along the right edge to merge the text box with the prev
+					// & next buttons, if the findbar isn't opened in quick find mode.
+					&:not(.minimal) {
+						border-top-right-radius: 0 !important;
+						border-bottom-right-radius: 0 !important;
+					}
+				}
 			}
 
-			&[checked='true'] {
-				color: var(--button-primary-color);
-				background-color: var(--button-primary-bgcolor);
+			/* Previous & next buttons. Hidden if the findbar is opened in quick find mode. */
+
+			toolbarbutton {
+				@extend %bordered-control;
+
+				color: var(--button-color);
+				background-color: var(--button-bgcolor);
+				border-width: 1px !important;
+
+				// The previous & next buttons have left & right margins respectively, by default.
+				// Remove them to merge the buttons with the text box.
+				margin-inline: 0 !important;
+
+				@if $buttons and $buttons-grouped {
+					&:last-of-type {
+						border-top-left-radius: 0 !important;
+						border-bottom-left-radius: 0 !important;
+					}
+					&:not(:last-of-type) {
+						border-radius: 0 !important;
+						border-right-width: 0 !important;
+					}
+				}
+			}
+		}
+
+		/* Checkboxes */
+
+		checkbox {
+			@if $buttons {
+				@extend %bordered-control;
+
+				// Restyle border thicknesses & radii of first & last checkboxes so they appear
+				// grouped together.
+
+				// The :first-of-type and :last-of-type pseudo-classes can't be used here because
+				// they follow the DOM order, and checkboxes might have been reordered via $order.
+				// Instead, identify the first & last checkboxes via their corresponding keys in
+				// $order.
+
+				$checkbox-by-index: ();
+				@each $name in map.keys($-checkbox-selectors) {
+					$checkbox-by-index: map.set($checkbox-by-index, list.index($order, $name), $name);
+				}
+
+				$first-checkbox: map.get($checkbox-by-index, math.min(map.keys($checkbox-by-index)...));
+				$last-checkbox: map.get($checkbox-by-index, math.max(map.keys($checkbox-by-index)...));
+
+				@if $buttons-grouped {
+					&:not(#{map.get($-checkbox-selectors, $last-checkbox)}) {
+						border-top-right-radius: 0;
+						border-bottom-right-radius: 0;
+					}
+
+					&:not(#{map.get($-checkbox-selectors, $first-checkbox)}) {
+						border-top-left-radius: 0;
+						border-bottom-left-radius: 0;
+						border-left-width: 0;
+
+						// Remove space between consecutive grouped buttons.
+						margin-inline-start: -$space-unit !important;
+					}
+				} @else {
+					&:not(#{map.get($-checkbox-selectors, $first-checkbox)}) {
+						// Move non-grouped buttons closer to each other.
+						margin-inline-start: -1 * math.div($space-unit, 2) !important;
+					}
+				}
+
+				padding: 3px 6px;
+				border-radius: var(--toolbarbutton-border-radius);
+				color: var(--button-color);
+				background-color: var(--button-bgcolor);
 
 				&:hover {
-					background-color: var(--button-primary-hover-bgcolor);
+					background-color: var(--button-hover-bgcolor);
 				}
 
 				&:active {
-					background-color: var(--button-primary-active-bgcolor);
+					background-color: var(--button-active-bgcolor);
+				}
+
+				&[checked='true'] {
+					color: var(--button-primary-color);
+					background-color: var(--button-primary-bgcolor);
+
+					&:hover {
+						background-color: var(--button-primary-hover-bgcolor);
+					}
+
+					&:active {
+						background-color: var(--button-primary-active-bgcolor);
+					}
+				}
+
+				&:focus-visible {
+					outline: var(--focus-outline);
+					outline-offset: var(--focus-outline-inset);
+				}
+
+				.checkbox-check {
+					display: none;
 				}
 			}
+		}
 
-			&:focus-visible {
-				outline: var(--focus-outline);
-				outline-offset: var(--focus-outline-inset);
-			}
+		/* Description */
 
-			.checkbox-check {
-				display: none;
+		// Hide empty description element.
+		description.findbar-label:empty {
+			display: none;
+		}
+
+		/* Order */
+
+		[anonid='findbar-textbox-wrapper'] {
+			order: list.index($order, TEXT_BOX) - 1;
+		}
+
+		@each $name, $selector in $-checkbox-selectors {
+			#{$selector} {
+				order: list.index($order, $name) - 1;
 			}
 		}
-	}
 
-	/* Description */
-
-	// Hide empty description element.
-	description.findbar-label:empty {
-		display: none;
-	}
-
-	/* Order */
-
-	[anonid='findbar-textbox-wrapper'] {
-		order: list.index($feature-order, TEXT_BOX) - 1;
-	}
-
-	@each $name, $selector in $-checkbox-selectors {
-		#{$selector} {
-			order: list.index($feature-order, $name) - 1;
+		label.findbar-label {
+			order: list.index($order, LABELS) - 1;
 		}
-	}
 
-	label.findbar-label {
-		order: list.index($feature-order, LABELS) - 1;
-	}
-
-	description.findbar-label {
-		order: list.index($feature-order, DESCRIPTION) - 1;
+		description.findbar-label {
+			order: list.index($order, DESCRIPTION) - 1;
+		}
 	}
 }
