@@ -9,11 +9,13 @@ $feature-buttons-grouped: true !default;
 
 // Style
 
+@use 'sass:math';
+
 @namespace url('http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul');
 @namespace htmlNs url('http://www.w3.org/1999/xhtml');
 
 findbar {
-	$space-unit: 8px;
+	$space-unit: 12px;
 
 	contain: content;
 	border: 1px solid var(--chrome-content-separator-color);
@@ -75,11 +77,20 @@ findbar {
 		border: 1px solid ThreeDShadow;
 	}
 
+	// Findbar controls live within an hbox.findbar-container, which is a flex parent. Remove
+	// horizontal margins of its direct descendants and space them out evenly using gap.
+	.findbar-container {
+		& > * {
+			margin-inline-start: 0 !important;
+			margin-inline-end: 0 !important;
+		}
+
+		gap: $space-unit;
+	}
+
 	/* Text box */
 
 	[anonid='findbar-textbox-wrapper'] {
-		margin-inline-end: $space-unit * if($feature-buttons, 1, 2) !important;
-
 		htmlNs|input {
 			@extend %bordered-control;
 
@@ -122,9 +133,6 @@ findbar {
 	/* Checkboxes */
 
 	checkbox {
-		// The checkboxes have horizontal margins by default. Remove them so that they stick together.
-		margin: 0 !important;
-
 		@if $feature-buttons {
 			@extend %bordered-control;
 
@@ -137,14 +145,15 @@ findbar {
 				&:not(:first-of-type) {
 					border-top-left-radius: 0;
 					border-bottom-left-radius: 0;
-
 					border-left-width: 0;
+
+					// Remove space between consecutive grouped buttons.
+					margin-inline-start: -$space-unit !important;
 				}
 			} @else {
-				// Space out consecutive checkboxes from each other if the buttons shouldn't be
-				// grouped together.
 				&:not(:first-of-type) {
-					margin-inline-start: $space-unit !important;
+					// Move non-grouped buttons closer to each other.
+					margin-inline-start: -1 * math.div($space-unit, 2) !important;
 				}
 			}
 
@@ -183,20 +192,7 @@ findbar {
 			.checkbox-check {
 				display: none;
 			}
-		} @else {
-			// Space out consecutive checkboxes from each other.
-			&:not(:first-of-type) {
-				margin-inline-start: $space-unit !important;
-			}
 		}
-	}
-
-	/* Labels */
-
-	label.findbar-label {
-		// Remove default horizontal margins of labels, then space them out consistently.
-		margin: 0 !important;
-		margin-inline-start: $space-unit !important;
 	}
 
 	/* Description */
