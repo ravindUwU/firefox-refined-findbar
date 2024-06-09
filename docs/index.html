@@ -68,10 +68,12 @@
 					// Fetch mixin.
 					log('Fetching mixin...');
 
+					const noCacheSuffix = `?t=${Date.now()}`;
+
 					const res = await fetch(
 						window.location.hostname === 'localhost'
-							? `../src/refined-findbar.scss?t=${Date.now()}`
-							: 'https://raw.githubusercontent.com/ravindUwU/firefox-refined-findbar/main/src/refined-findbar.scss',
+							? `../src/refined-findbar.scss${noCacheSuffix}`
+							: `https://raw.githubusercontent.com/ravindUwU/firefox-refined-findbar/main/src/refined-findbar.scss${noCacheSuffix}`,
 					);
 
 					if (res.status !== 200) {
