@@ -87,7 +87,7 @@
 
 					// Replace '\r's just in case.
 					let scss = await res.text();
-					scss = scss.replace(/\r/g, '');
+					scss = scss.trim().replace(/\r/g, '');
 
 					// Find mixin signature.
 					log('Locating signature...');
@@ -115,18 +115,28 @@
 					// @include-ing the mixin with the default signature.
 					const playScss = [
 						scss,
-						'// TODO: Continue from here. Modify the following @include rule as necessary.',
+						'',
+						'// TODO: Continue here. Modify the following @include rule as necessary.',
 						`@include ${sig};`,
 						'',
 					].join('\n');
 
+					const fromLine = scss.match(/\n/g).length + 4;
+					const toLine = fromLine + sig.match(/\n/g).length + 1;
+
 					log('Making playground URL...');
 
 					// The URL includes the playground contents encoded into the location hash:
-					// https://github.com/sass/sass-site/blob/eaa021fcad7fcd04956bb4efbee03e1356c52480/source/assets/js/playground.ts#L239-L242
-					// https://github.com/sass/sass-site/blob/eaa021fcad7fcd04956bb4efbee03e1356c52480/source/assets/js/playground/utils.ts#L11-L37
+					// https://github.com/sass/sass-site/blob/560afa98051a003a0ff1550181ea09c8413206a6/source/assets/js/playground.ts#L304-L307
+					// https://github.com/sass/sass-site/blob/560afa98051a003a0ff1550181ea09c8413206a6/source/assets/js/playground/utils.ts#L11-L67
 
-					function stateToBase64(state) {
+					function serializeState(state) {
+						const contents = serializeStateContents(state);
+						const params = serializeStateParams(state);
+						return `${contents}${params ? `?${params}` : ''}`;
+					}
+
+					function serializeStateContents(state) {
 						const inputFormatChar = state.inputFormat === 'scss' ? 1 : 0;
 						const outputFormatChar = state.outputFormat === 'expanded' ? 1 : 0;
 						const persistedState = `${inputFormatChar}${outputFormatChar}${state.inputValue}`;
@@ -138,10 +148,22 @@
 						return btoa(String.fromCharCode(...deflated));
 					}
 
-					const playUrl = `https://sass-lang.com/playground/#${stateToBase64({
+					function serializeStateParams(state) {
+						const params = new URLSearchParams();
+
+						if (state.selection) {
+							const [fromL, fromC, toL, toC] = state.selection;
+							params.set('s', `L${fromL}C${fromC}-L${toL}C${toC}`);
+						}
+
+						return params.size === 0 ? null : params.toString();
+					}
+
+					const playUrl = `https://sass-lang.com/playground/#${serializeState({
 						inputFormat: 'scss',
 						outputFormat: 'expanded',
 						inputValue: playScss,
+						selection: [fromLine, 1, toLine, 1],
 					})}`;
 
 					log(`

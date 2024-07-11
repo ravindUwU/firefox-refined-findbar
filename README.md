@@ -118,23 +118,25 @@ online Sass transpiler can be used for this purpose.
 
 - **The quickest way to get started** is to,
 
-  1. Visit https://ravindUwU.github.io/firefox-refined-findbar, which automatically generates a link
+  1. Visit https://ravindUwU.github.io/firefox-refined-findbar, will automatically generate a link
      to the [Sass Playground][sassPlay].
 
-  1. Visit the link, modify the SCSS as necessary (specifically, the `@include refined-findbar(...)`
-     statement), and copy the CSS output into your `userChrome.css` file.
+  2. Visit the generated link, modify the SCSS as necessary (specifically, the highlighted
+     `@include` statement).
+
+  3. Copy the CSS output into your `userChrome.css` file and restart Firefox.
 
   <details>
   <summary>If that didn't work,</summary>
 
-  1. Open an online transpiler (e.g., the [Sass Playground][sassPlay] or
+  1. Open an online transpiler (e.g., [Sass Playground][sassPlay] or
      [SassMeister](https://www.sassmeister.com/)).
 
-  2. Copy the contents of [`refined-findbar.scss`][src] to the SCSS pane.
+  2. Copy the contents of [`refined-findbar.scss`][src] into the SCSS pane.
 
   3. Add the line `@include refined-findbar()` after the copied contents, and override variables as
      necessary. The default values can be found in the `@mixin refined-findbar` declaration near the
-     top of the copied contents.
+     top of the contents copied in step 2.
 
      ```scss
      // <contents of refined-findbar.scss>
@@ -147,7 +149,7 @@ online Sass transpiler can be used for this purpose.
      );
      ```
 
-  4. Copy the CSS output into your `userChrome.css` file.
+  4. Copy the CSS output into your `userChrome.css` file and restart Firefox.
 
   </details>
 
