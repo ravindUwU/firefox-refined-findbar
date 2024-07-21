@@ -181,6 +181,12 @@
 						detail = 'Logged details to the browser console.';
 					}
 
+					function escapeHtml(s) {
+						const div = document.createElement('div');
+						div.innerText = s;
+						return div.innerHTML;
+					}
+
 					log(`
 						<div>
 							<div>
@@ -196,7 +202,7 @@
 								</span>
 							</div>
 							<div>
-								<pre style="margin-left: 2rem">${detail}</pre>
+								<pre style="margin-left: 2rem">${escapeHtml(s)}</pre>
 							</div>
 						</div>
 					`);
