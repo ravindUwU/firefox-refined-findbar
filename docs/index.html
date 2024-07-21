@@ -70,7 +70,7 @@
 					const noCacheSuffix = `?t=${Date.now()}`;
 
 					const res = await fetch(
-						window.location.hostname === 'localhost'
+						window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
 							? `../src/refined-findbar.scss${noCacheSuffix}`
 							: `https://raw.githubusercontent.com/ravindUwU/firefox-refined-findbar/main/src/refined-findbar.scss${noCacheSuffix}`,
 					);
