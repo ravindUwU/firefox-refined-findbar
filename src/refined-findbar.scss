@@ -2,6 +2,32 @@
 @use 'sass:math';
 @use 'sass:map';
 
+/// Makes a CSS `var()` expression that references a variable and any fallbacks, in the specified
+/// order.
+///
+/// @example scss Variable without fallback
+///     @debug -var(a);
+///     // Prints var(--a)
+///
+/// @example scss Variable with fallbacks
+///     @debug -var(a, b, c);
+///     // var(--a, var(--b, var(--c)))
+@function -var($names...) {
+	$css: '';
+
+	$i: list.length($names);
+	@while $i > 0 {
+		@if $css == '' {
+			$css: 'var(--' + list.nth($names, $i) + ')';
+		} @else {
+			$css: 'var(--' + list.nth($names, $i) + ', ' + $css + ')';
+		}
+		$i: $i - 1;
+	}
+
+	@return $css;
+}
+
 $-checkbox-selectors: (
 	CHECKBOX_HIGHLIGHT_ALL: "checkbox[anonid='highlight']",
 	CHECKBOX_MATCH_CASE: "checkbox[anonid='find-case-sensitive']",
@@ -129,7 +155,7 @@ $-checkbox-selectors: (
 				@extend %bordered-control;
 
 				color: var(--button-color);
-				background-color: var(--button-bgcolor);
+				background-color: #{-var(button-background-color, button-bgcolor)};
 				border-width: 1px !important;
 
 				// The previous & next buttons have left & right margins respectively, by default.
@@ -158,26 +184,26 @@ $-checkbox-selectors: (
 				padding: 3px 6px;
 				border-radius: var(--toolbarbutton-border-radius);
 				color: var(--button-color);
-				background-color: var(--button-bgcolor);
+				background-color: #{-var(button-background-color, button-bgcolor)};
 
 				&:hover {
-					background-color: var(--button-hover-bgcolor);
+					background-color: #{-var(button-background-color-hover, button-hover-bgcolor)};
 				}
 
 				&:active {
-					background-color: var(--button-active-bgcolor);
+					background-color: #{-var(button-background-color-active, button-active-bgcolor)};
 				}
 
 				&[checked='true'] {
-					color: var(--button-primary-color);
-					background-color: var(--button-primary-bgcolor);
+					color: #{-var(button-text-color-primary, button-primary-color)};
+					background-color: #{-var(color-accent-primary, button-primary-bgcolor)};
 
 					&:hover {
-						background-color: var(--button-primary-hover-bgcolor);
+						background-color: #{-var(color-accent-primary-hover, button-primary-hover-bgcolor)};
 					}
 
 					&:active {
-						background-color: var(--button-primary-active-bgcolor);
+						background-color: #{-var(color-accent-primary-active, button-primary-active-bgcolor)};
 					}
 				}
 
