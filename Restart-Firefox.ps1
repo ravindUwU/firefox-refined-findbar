@@ -2,9 +2,21 @@
 .SYNOPSIS
 	Stops currently running Firefox processes, stops them, and starts one.
 #>
+[CmdletBinding()]
+param (
+	# Only affects Firefox developer edition (by checking whether "Developer" exists in path to the
+	# process binary.
+	[switch]
+	$Dev
+)
 
 function main {
-	$foxxos = Get-Process firefox -ErrorAction Ignore
+	$foxxos = Get-Process firefox -ErrorAction Ignore | Where-Object { $null -ne $_.Path }
+
+	if ($Dev) {
+		$foxxos = $foxxos | Where-Object { $_.Path.Contains('Developer') }
+	}
+
 	logMeh "Found $($foxxos.Count) foxxos"
 
 	if ($foxxos.Count -eq 0) {
