@@ -15,14 +15,12 @@
 @function -var($names...) {
 	$css: '';
 
-	$i: list.length($names);
-	@while $i > 0 {
+	@for $i from list.length($names) through 1 {
 		@if $css == '' {
 			$css: 'var(--' + list.nth($names, $i) + ')';
 		} @else {
 			$css: 'var(--' + list.nth($names, $i) + ', ' + $css + ')';
 		}
-		$i: $i - 1;
 	}
 
 	@return $css;
