@@ -75,11 +75,10 @@ $-checkbox-selectors: (
 	}
 
 	findbar {
-		$space-unit: 12px;
+		$space-unit: 8px;
 
 		contain: content;
 		border: 1px solid var(--chrome-content-separator-color);
-		padding-inline-start: math.div($space-unit, 3);
 
 		/* Position */
 
@@ -118,6 +117,21 @@ $-checkbox-selectors: (
 
 		%bordered-control {
 			border: 1px solid ThreeDShadow;
+		}
+
+		// Uniformly pad & space out direct descendants.
+		& {
+			gap: $space-unit;
+			padding: 6px;
+			padding-inline-start: $space-unit;
+			padding-inline-end: $space-unit;
+		}
+
+		// Remove horizontal margins of direct descendants because the gap (above) will space them
+		// out.
+		& > * {
+			margin-inline-start: 0 !important;
+			margin-inline-end: 0 !important;
 		}
 
 		// Findbar controls live within an hbox.findbar-container, which is a flex parent. Remove
