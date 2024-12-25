@@ -1,7 +1,7 @@
 # Refined find bar for Firefox
 
-`userChrome.css`[^userchrome] styles that refine the Firefox find bar by repositioning it, adjusting
-spacing, styling internal elements.
+`userChrome.css`[^userchrome] styles that improve the Firefox find bar by repositioning it,
+adjusting spacing and styling its elements.
 
 [^userchrome]:
     Learn more about `userChrome.css` at: https://kb.mozillazine.org/UserChrome.css,
@@ -113,13 +113,12 @@ e.g., If the order is specified as `DESCRIPTION`, `LABELS`, `TEXT_BOX`, `CHECKBO
 
 ## Usage
 
-This style is authored as an [SCSS mixin][sassMixin] and must be transpiled to CSS before use. An
-online Sass transpiler can be used for this purpose.
+This style is authored as an [SCSS mixin][sassMixin] and must be transpiled to CSS first.
 
 - **The quickest way to get started** is to,
 
-  1. Visit https://ravindUwU.github.io/firefox-refined-findbar, will automatically generate a link
-     to the [Sass Playground][sassPlay].
+  1. Visit https://ravindUwU.github.io/firefox-refined-findbar, which will automatically generate a
+     link to the [Sass Playground][sassPlay].
 
   2. Visit the generated link, modify the SCSS as necessary (specifically, the highlighted
      `@include` statement).
@@ -156,6 +155,8 @@ online Sass transpiler can be used for this purpose.
 - **To transpile locally**, [`@use`][sassUse] the [`refined-findbar.scss`][src] file,
   [`@include`][sassMixin] the mixin changing any variables as necessary, and use [`sass`][npmSass]
   to transpile to CSS.
+
+<br>
 
 [src]: ./src/refined-findbar.scss
 [sassUse]: https://sass-lang.com/documentation/at-rules/use/

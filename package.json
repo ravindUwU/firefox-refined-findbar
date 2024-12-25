@@ -7,10 +7,9 @@
 	"scripts": {
 		"build": "sass ./src/refined-findbar.scss:./dist/refined-findbar.css --no-source-map --no-error-css",
 		"watch": "pnpm run build -w",
-		"site": "http-server",
 		"clean": "rimraf ./dist",
-		"pretty:check": "prettier -c .",
-		"pretty:write": "prettier -w ."
+		"site": "http-server",
+		"pretty": "prettier -c ."
 	},
 	"devDependencies": {
 		"http-server": "^14.1.1",
