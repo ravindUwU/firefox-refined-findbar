@@ -68,8 +68,14 @@ $-checkbox-selectors: (
 	}
 
 	@keyframes findbar-scale-out {
+		// Prolong visibility during animation.
 		0% {
 			transform: scaleY(1);
+			visibility: visible;
+		}
+		99% {
+			transform: scaleY(0);
+			visibility: visible;
 		}
 		100% {
 			transform: scaleY(0);
@@ -111,10 +117,10 @@ $-checkbox-selectors: (
 
 		// Scale in when shown, out when hidden.
 
-		animation: 0.1s findbar-scale-in;
+		animation: findbar-scale-in 0.1s;
 
 		&[hidden='true'] {
-			animation: 0.1s findbar-scale-out;
+			animation: findbar-scale-out 0.1s;
 		}
 
 		%bordered-control {
