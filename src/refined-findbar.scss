@@ -41,8 +41,9 @@ $-checkbox-selectors: (
 
 		$buttons: true,
 		$buttons-grouped: true,
-
 		$hide-close-button: false,
+
+		$hide-when-unfocused: false,
 
 		$order: (
 			TEXT_BOX,
@@ -79,6 +80,20 @@ $-checkbox-selectors: (
 		}
 		100% {
 			transform: scaleY(0);
+		}
+	}
+
+	@keyframes findbar-hide-when-unfocused {
+		// Prolong opacity & height during animation.
+		0% {
+			opacity: 1;
+			height: auto;
+		}
+		99% {
+			opacity: 1;
+			height: auto;
+		}
+		100% {
 		}
 	}
 
@@ -125,6 +140,18 @@ $-checkbox-selectors: (
 
 		%bordered-control {
 			border: 1px solid ThreeDShadow;
+		}
+
+		@if ($hide-when-unfocused) {
+			&:not(:focus-within) {
+				animation:
+					findbar-scale-out 0.1s,
+					findbar-hide-when-unfocused 0.1s;
+				height: 0;
+				opacity: 0;
+				pointer-events: none;
+				overflow: hidden;
+			}
 		}
 
 		// Uniformly pad & space out direct descendants.
