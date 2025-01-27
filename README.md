@@ -89,6 +89,22 @@ If `true`, groups find bar buttons together,
 
 <!-- -->
 <tr>
+<td valign="top"><code>$hide-close-button</code></td>
+<td valign="top">
+
+If `true`, hides the close button.
+
+**Important:** with the close button hidden, the only way to close the find bar would be to press
+<kbd>Esc</kbd> when its text box or buttons are focused. To quickly focus the textbox, press the
+find shortcut <kbd>Ctrl/Cmd</kbd>+<kbd>F</kbd>.
+
+![](./img/feature-hide-close-button-true.png)
+
+</td>
+</tr>
+
+<!-- -->
+<tr>
 <td valign="top"><code>$order</code></td>
 <td valign="top">
 
