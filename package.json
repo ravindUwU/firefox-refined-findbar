@@ -13,8 +13,8 @@
 	},
 	"devDependencies": {
 		"http-server": "^14.1.1",
-		"prettier": "^3.3.3",
+		"prettier": "^3.5.3",
 		"rimraf": "^6.0.1",
-		"sass": "^1.77.8"
+		"sass": "^1.86.3"
 	}
 }
