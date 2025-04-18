@@ -94,9 +94,11 @@ If `true`, groups find bar buttons together,
 
 If `true`, hides the close button.
 
-**Important:** with this option enabled, the only way to close the find bar would be to press
-<kbd>Esc</kbd> when its textbox or buttons are focused. To focus the textbox, press the find
-shortcut <kbd>Ctrl/Cmd</kbd>+<kbd>F</kbd>.
+> [!IMPORTANT]
+>
+> With this option enabled, the only way to close the find bar would be to press <kbd>Esc</kbd> when
+> its textbox or buttons are focused. To focus the textbox, press the find shortcut
+> <kbd>Ctrl/Cmd</kbd>+<kbd>F</kbd>.
 
 ![](./img/feature-hide-close-button-true.png)
 
@@ -110,8 +112,10 @@ shortcut <kbd>Ctrl/Cmd</kbd>+<kbd>F</kbd>.
 
 If `true`, hides the find bar when its elements (textbox or buttons) are not in focus.
 
-**Important:** with this option enabled, press <kbd>Ctrl/Cmd</kbd>+<kbd>F</kbd> to reopen/focus the
-find bar, if it loses focus (and is therefore, hidden).
+> [!IMPORTANT]
+>
+> With this option enabled, press <kbd>Ctrl/Cmd</kbd>+<kbd>F</kbd> to reopen/focus the find bar, if
+> it loses focus (and is therefore, hidden).
 
 </td>
 </tr>
