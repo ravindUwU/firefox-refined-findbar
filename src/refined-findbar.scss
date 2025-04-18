@@ -33,6 +33,8 @@ $-checkbox-selectors: (
 	CHECKBOX_WHOLE_WORDS: "checkbox[anonid='find-entire-word']",
 );
 
+$-space: 8px;
+
 @mixin /* sig:start */
 	refined-findbar(
 		$float: true,
@@ -98,8 +100,6 @@ $-checkbox-selectors: (
 	}
 
 	findbar {
-		$space-unit: 8px;
-
 		contain: content;
 		border: 1px solid var(--chrome-content-separator-color);
 
@@ -156,10 +156,10 @@ $-checkbox-selectors: (
 
 		// Uniformly pad & space out direct descendants.
 		& {
-			gap: $space-unit;
+			gap: $-space;
 			padding: 6px;
-			padding-inline-start: $space-unit;
-			padding-inline-end: $space-unit;
+			padding-inline-start: $-space;
+			padding-inline-end: $-space;
 		}
 
 		// Remove horizontal margins of direct descendants because the gap (above) will space them
@@ -172,7 +172,7 @@ $-checkbox-selectors: (
 		// Findbar controls live within an hbox.findbar-container, which is a flex parent. Remove
 		// horizontal margins of direct descendants and space them out evenly using gap.
 		.findbar-container {
-			gap: $space-unit;
+			gap: $-space;
 
 			& > * {
 				margin-inline-start: 0 !important;
@@ -291,12 +291,12 @@ $-checkbox-selectors: (
 						border-left-width: 0;
 
 						// Remove space between consecutive grouped buttons.
-						margin-inline-start: -$space-unit !important;
+						margin-inline-start: -$-space !important;
 					}
 				} @else {
 					&:not(#{map.get($-checkbox-selectors, $first-checkbox)}) {
 						// Move non-grouped buttons closer to each other.
-						margin-inline-start: -1 * math.div($space-unit, 2) !important;
+						margin-inline-start: -1 * math.div($-space, 2) !important;
 					}
 				}
 			}
