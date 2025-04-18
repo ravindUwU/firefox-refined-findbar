@@ -61,7 +61,7 @@ $-space: 8px;
 	@namespace url('http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul');
 	@namespace htmlNs url('http://www.w3.org/1999/xhtml');
 
-	@keyframes findbar-scale-in {
+	@keyframes refined-findbar-scale-in {
 		0% {
 			transform: scaleY(0);
 		}
@@ -70,7 +70,7 @@ $-space: 8px;
 		}
 	}
 
-	@keyframes findbar-scale-out {
+	@keyframes refined-findbar-scale-out {
 		// Prolong visibility during animation.
 		0% {
 			transform: scaleY(1);
@@ -85,7 +85,7 @@ $-space: 8px;
 		}
 	}
 
-	@keyframes findbar-hide-when-unfocused {
+	@keyframes refined-findbar-hide-when-unfocused {
 		// Prolong opacity & height during animation.
 		0% {
 			opacity: 1;
@@ -132,10 +132,10 @@ $-space: 8px;
 
 		// Scale in when shown, out when hidden.
 
-		animation: findbar-scale-in 0.1s;
+		animation: refined-findbar-scale-in 0.1s;
 
 		&[hidden='true'] {
-			animation: findbar-scale-out 0.1s;
+			animation: refined-findbar-scale-out 0.1s;
 		}
 
 		%bordered-control {
@@ -145,8 +145,8 @@ $-space: 8px;
 		@if ($hide-when-unfocused) {
 			&:not(:focus-within) {
 				animation:
-					findbar-scale-out 0.1s,
-					findbar-hide-when-unfocused 0.1s;
+					refined-findbar-scale-out 0.1s,
+					refined-findbar-hide-when-unfocused 0.1s;
 				height: 0;
 				opacity: 0;
 				pointer-events: none;
