@@ -279,6 +279,13 @@
 					margin-inline-start: -1 * math.div($-space, 2) !important;
 				}
 			}
+		} @else {
+			&:is(#{map.get($-checkbox-selectors, $first-checkbox)}) {
+				margin-inline-start: math.div($-space, 2) !important;
+			}
+			&:is(#{map.get($-checkbox-selectors, $last-checkbox)}) {
+				margin-inline-end: math.div($-space, 2) !important;
+			}
 		}
 	}
 
