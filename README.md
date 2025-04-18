@@ -108,10 +108,21 @@ shortcut <kbd>Ctrl/Cmd</kbd>+<kbd>F</kbd>.
 <td valign="top"><code>$hide-when-unfocused</code></td>
 <td valign="top">
 
-If `true`, hides the find bar when none of its elements (textbox or buttons) are in focus.
+If `true`, hides the find bar when its elements (textbox or buttons) are not in focus.
 
-**Important:** with this option enabled, press <kbd>Ctrl/Cmd</kbd>+<kbd>F</kbd> to reopen the find
-bar, if it loses focus (and is therefore, hidden).
+**Important:** with this option enabled, press <kbd>Ctrl/Cmd</kbd>+<kbd>F</kbd> to reopen/focus the
+find bar, if it loses focus (and is therefore, hidden).
+
+</td>
+</tr>
+
+<!-- -->
+<tr>
+<td valign="top"><code>$opacity-when-unfocused</code></td>
+<td valign="top">
+
+Transparency of the find bar when its elements (textbox or buttons) are not in focus. Excepts a
+number between 0 (fully transparent) and 1 (fully opaque).
 
 </td>
 </tr>
@@ -123,7 +134,7 @@ bar, if it loses focus (and is therefore, hidden).
 
 Reorders elements of the find bar.
 
-This is a list that contains all of the following values (listed in the default order), in any
+This is a list that contains all of the following tokens (listed here in the default order), in any
 order: `TEXT_BOX`, `CHECKBOX_HIGHLIGHT_ALL`, `CHECKBOX_MATCH_CASE`, `CHECKBOX_MATCH_DIACRITICS`,
 `CHECKBOX_WHOLE_WORDS`, `LABELS`, `DESCRIPTION`.
 

@@ -10,9 +10,10 @@
 
 		$buttons: true,
 		$buttons-grouped: true,
-		$hide-close-button: false,
 
+		$hide-close-button: false,
 		$hide-when-unfocused: false,
+		$opacity-when-unfocused: 1,
 
 		$order: (
 			TEXT_BOX,
@@ -164,6 +165,19 @@
 			opacity: 0;
 			pointer-events: none;
 			overflow: hidden;
+		}
+	}
+
+	// MARK: Opacity when unfocused
+
+	@if ($opacity-when-unfocused < 1) {
+		findbar {
+			transition: opacity;
+			opacity: 1 0.1s;
+
+			&:not(:focus-within) {
+				opacity: $opacity-when-unfocused;
+			}
 		}
 	}
 
