@@ -2,39 +2,6 @@
 @use 'sass:math';
 @use 'sass:map';
 
-/// Makes a CSS `var()` expression that references a variable and any fallbacks, in the specified
-/// order.
-///
-/// @example scss Variable without fallback
-///     @debug -var(a);
-///     // Prints var(--a)
-///
-/// @example scss Variable with fallbacks
-///     @debug -var(a, b, c);
-///     // var(--a, var(--b, var(--c)))
-@function -var($names...) {
-	$css: '';
-
-	@for $i from list.length($names) through 1 {
-		@if $css == '' {
-			$css: 'var(--' + list.nth($names, $i) + ')';
-		} @else {
-			$css: 'var(--' + list.nth($names, $i) + ', ' + $css + ')';
-		}
-	}
-
-	@return $css;
-}
-
-$-checkbox-selectors: (
-	CHECKBOX_HIGHLIGHT_ALL: "checkbox[anonid='highlight']",
-	CHECKBOX_MATCH_CASE: "checkbox[anonid='find-case-sensitive']",
-	CHECKBOX_MATCH_DIACRITICS: "checkbox[anonid='find-match-diacritics']",
-	CHECKBOX_WHOLE_WORDS: "checkbox[anonid='find-entire-word']",
-);
-
-$-space: 8px;
-
 @mixin /* sig:start */
 	refined-findbar(
 		$float: true,
@@ -61,6 +28,82 @@ $-space: 8px;
 	@namespace url('http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul');
 	@namespace htmlNs url('http://www.w3.org/1999/xhtml');
 
+	// MARK: Position
+
+	findbar {
+		contain: content;
+
+		// The findbar sits in a relatively positioned a vbox.browserContainer, so we're free to
+		// absolutely position the findbar within it.
+		position: absolute;
+
+		@if $float {
+			// Top or bottom align the floating findbar.
+			right: $float-distance;
+			#{$float-alignment}: $float-distance;
+		} @else {
+			// Otherwise, top-align the findbar, move it up by 1px to "merge" it with the rest of
+			// the chrome.
+			top: -1px;
+			right: 44px;
+		}
+	}
+
+	// MARK: Children
+
+	findbar {
+		// Uniformly pad & space out direct descendants.
+		gap: $-space;
+		padding: 6px;
+		padding-inline-start: $-space;
+		padding-inline-end: $-space;
+
+		// Remove horizontal margins of direct descendants because the gap (above) will space them
+		// out.
+		& > * {
+			margin-inline-start: 0 !important;
+			margin-inline-end: 0 !important;
+		}
+
+		// Findbar controls live within an hbox.findbar-container, which is a flex parent. Remove
+		// horizontal margins of direct descendants and space them out evenly with gap.
+		.findbar-container {
+			gap: $-space;
+
+			& > * {
+				margin-inline-start: 0 !important;
+				margin-inline-end: 0 !important;
+			}
+		}
+
+		// Hide empty description element.
+		description.findbar-label:empty {
+			display: none;
+		}
+
+		@if ($hide-close-button) {
+			toolbarbutton.findbar-closebutton {
+				display: none;
+			}
+		}
+	}
+
+	// MARK: Border
+
+	findbar {
+		border: 1px solid var(--chrome-content-separator-color);
+
+		@if $float {
+			border-radius: var(--toolbarbutton-border-radius);
+		} @else {
+			border-bottom-left-radius: var(--toolbarbutton-border-radius);
+			border-bottom-right-radius: var(--toolbarbutton-border-radius);
+			border-top-width: 0 !important;
+		}
+	}
+
+	// MARK: Animation
+
 	@keyframes refined-findbar-scale-in {
 		0% {
 			transform: scaleY(0);
@@ -85,232 +128,163 @@ $-space: 8px;
 		}
 	}
 
-	@keyframes refined-findbar-hide-when-unfocused {
-		// Prolong opacity & height during animation.
-		0% {
-			opacity: 1;
-			height: auto;
-		}
-		99% {
-			opacity: 1;
-			height: auto;
-		}
-		100% {
-		}
-	}
-
 	findbar {
-		contain: content;
-		border: 1px solid var(--chrome-content-separator-color);
-
-		/* Position */
-
-		// The findbar sits in a relatively positioned a vbox.browserContainer, so we're free to
-		// absolutely position the findbar within it.
-		position: absolute;
-
-		@if $float {
-			// Top or bottom align the floating findbar.
-			right: $float-distance;
-			#{$float-alignment}: $float-distance;
-			transform-origin: #{$float-alignment} center;
-
-			border-radius: var(--toolbarbutton-border-radius);
-		} @else {
-			// Top-align the non-floating findbar, move it up by 1px to "merge" it with the rest of
-			// the chrome.
-			top: -1px;
-			right: 44px;
-			transform-origin: top center;
-
-			border-bottom-left-radius: var(--toolbarbutton-border-radius);
-			border-bottom-right-radius: var(--toolbarbutton-border-radius);
-			border-top-width: 0 !important;
-		}
-
-		/* Animation */
+		transform-origin: if($float, $float-alignment, top) center;
 
 		// Scale in when shown, out when hidden.
-
 		animation: refined-findbar-scale-in 0.1s;
 
 		&[hidden='true'] {
 			animation: refined-findbar-scale-out 0.1s;
 		}
+	}
 
-		%bordered-control {
+	// MARK: Hide when unfocused
+
+	@if ($hide-when-unfocused) {
+		@keyframes refined-findbar-hide-when-unfocused {
+			// Prolong opacity & height during animation.
+			0% {
+				opacity: 1;
+				height: auto;
+			}
+			99% {
+				opacity: 1;
+				height: auto;
+			}
+			100% {
+			}
+		}
+
+		findbar:not(:focus-within) {
+			animation:
+				refined-findbar-scale-out 0.1s,
+				refined-findbar-hide-when-unfocused 0.1s;
+			height: 0;
+			opacity: 0;
+			pointer-events: none;
+			overflow: hidden;
+		}
+	}
+
+	// MARK: Text box
+
+	findbar [anonid='findbar-textbox-wrapper'] {
+		htmlNs|input {
 			border: 1px solid ThreeDShadow;
-		}
 
-		@if ($hide-when-unfocused) {
-			&:not(:focus-within) {
-				animation:
-					refined-findbar-scale-out 0.1s,
-					refined-findbar-hide-when-unfocused 0.1s;
-				height: 0;
-				opacity: 0;
-				pointer-events: none;
-				overflow: hidden;
-			}
-		}
-
-		// Uniformly pad & space out direct descendants.
-		& {
-			gap: $-space;
-			padding: 6px;
-			padding-inline-start: $-space;
-			padding-inline-end: $-space;
-		}
-
-		// Remove horizontal margins of direct descendants because the gap (above) will space them
-		// out.
-		& > * {
-			margin-inline-start: 0 !important;
-			margin-inline-end: 0 !important;
-		}
-
-		// Findbar controls live within an hbox.findbar-container, which is a flex parent. Remove
-		// horizontal margins of direct descendants and space them out evenly using gap.
-		.findbar-container {
-			gap: $-space;
-
-			& > * {
-				margin-inline-start: 0 !important;
-				margin-inline-end: 0 !important;
-			}
-		}
-
-		/* Text box */
-
-		[anonid='findbar-textbox-wrapper'] {
-			htmlNs|input {
-				@extend %bordered-control;
-
-				@if $buttons and $buttons-grouped {
-					// Remove border radii along the right edge to merge the text box with the prev
-					// & next buttons, if the findbar isn't opened in quick find mode.
-					&:not(.minimal) {
-						border-top-right-radius: 0 !important;
-						border-bottom-right-radius: 0 !important;
-					}
-				}
-			}
-
-			/* Previous & next buttons. Hidden if the findbar is opened in quick find mode. */
-
-			toolbarbutton {
-				@extend %bordered-control;
-
-				color: var(--button-color);
-				background-color: #{-var(button-background-color, button-bgcolor)};
-				border-width: 1px !important;
-
-				// The previous & next buttons have left & right margins respectively, by default.
-				// Remove them to merge the buttons with the text box.
-				margin-inline: 0 !important;
-
-				@if $buttons and $buttons-grouped {
-					&:last-of-type {
-						border-top-left-radius: 0 !important;
-						border-bottom-left-radius: 0 !important;
-					}
-					&:not(:last-of-type) {
-						border-radius: 0 !important;
-						border-right-width: 0 !important;
-					}
+			@if $buttons and $buttons-grouped {
+				// Remove border radii along the right edge to merge the text box with the prev
+				// & next buttons, if the findbar isn't opened in quick find mode.
+				&:not(.minimal) {
+					border-top-right-radius: 0 !important;
+					border-bottom-right-radius: 0 !important;
 				}
 			}
 		}
 
-		/* Checkboxes */
+		/* Previous & next buttons. Hidden if the findbar is opened in quick find mode. */
+		toolbarbutton {
+			color: var(--button-color);
+			background-color: #{-var(button-background-color, button-bgcolor)};
+			border: 1px solid ThreeDShadow;
 
-		checkbox {
-			@if $buttons {
-				@extend %bordered-control;
+			// The previous & next buttons have left & right margins respectively, by default.
+			// Remove them to merge the buttons with the text box.
+			margin-inline: 0 !important;
 
-				padding: 3px 6px;
-				border-radius: var(--toolbarbutton-border-radius);
-				color: var(--button-color);
-				background-color: #{-var(button-background-color, button-bgcolor)};
+			@if $buttons and $buttons-grouped {
+				&:last-of-type {
+					border-top-left-radius: 0 !important;
+					border-bottom-left-radius: 0 !important;
+				}
+				&:not(:last-of-type) {
+					border-radius: 0 !important;
+					border-right-width: 0 !important;
+				}
+			}
+		}
+	}
+
+	// MARK: Checkboxes
+
+	// The :first-of-type and :last-of-type pseudo-classes can't be used here because the
+	// selectors follow the DOM order, and checkboxes might have been reordered via $order.
+	// Instead, identify the first & last checkboxes via their position in $order.
+	$checkbox-by-index: ();
+	@each $name in map.keys($-checkbox-selectors) {
+		$checkbox-by-index: map.set($checkbox-by-index, list.index($order, $name), $name);
+	}
+	$first-checkbox: map.get($checkbox-by-index, math.min(map.keys($checkbox-by-index)...));
+	$last-checkbox: map.get($checkbox-by-index, math.max(map.keys($checkbox-by-index)...));
+
+	findbar checkbox {
+		@if $buttons {
+			padding: 3px 6px;
+			border: 1px solid ThreeDShadow;
+			border-radius: var(--toolbarbutton-border-radius);
+			color: var(--button-color);
+			background-color: #{-var(button-background-color, button-bgcolor)};
+
+			&:hover {
+				background-color: #{-var(button-background-color-hover, button-hover-bgcolor)};
+			}
+
+			&:active {
+				background-color: #{-var(button-background-color-active, button-active-bgcolor)};
+			}
+
+			&[checked='true'] {
+				color: #{-var(button-text-color-primary, button-primary-color)};
+				background-color: #{-var(color-accent-primary, button-primary-bgcolor)};
 
 				&:hover {
-					background-color: #{-var(button-background-color-hover, button-hover-bgcolor)};
+					background-color: #{-var(color-accent-primary-hover, button-primary-hover-bgcolor)};
 				}
 
 				&:active {
-					background-color: #{-var(button-background-color-active, button-active-bgcolor)};
+					background-color: #{-var(color-accent-primary-active, button-primary-active-bgcolor)};
 				}
+			}
 
-				&[checked='true'] {
-					color: #{-var(button-text-color-primary, button-primary-color)};
-					background-color: #{-var(color-accent-primary, button-primary-bgcolor)};
+			&:focus-visible {
+				outline: var(--focus-outline);
+				outline-offset: var(--focus-outline-inset);
+			}
 
-					&:hover {
-						background-color: #{-var(color-accent-primary-hover, button-primary-hover-bgcolor)};
-					}
+			.checkbox-check {
+				display: none;
+			}
 
-					&:active {
-						background-color: #{-var(color-accent-primary-active, button-primary-active-bgcolor)};
-					}
-				}
-
-				&:focus-visible {
-					outline: var(--focus-outline);
-					outline-offset: var(--focus-outline-inset);
-				}
-
-				.checkbox-check {
-					display: none;
-				}
-
+			@if $buttons-grouped {
 				// Restyle border thicknesses & radii of first & last checkboxes so they appear
 				// grouped together.
 
-				// The :first-of-type and :last-of-type pseudo-classes can't be used here because
-				// they follow the DOM order, and checkboxes might have been reordered via $order.
-				// Instead, identify the first & last checkboxes via their corresponding keys in
-				// $order.
-
-				$checkbox-by-index: ();
-				@each $name in map.keys($-checkbox-selectors) {
-					$checkbox-by-index: map.set($checkbox-by-index, list.index($order, $name), $name);
+				&:not(#{map.get($-checkbox-selectors, $last-checkbox)}) {
+					border-top-right-radius: 0;
+					border-bottom-right-radius: 0;
 				}
 
-				$first-checkbox: map.get($checkbox-by-index, math.min(map.keys($checkbox-by-index)...));
-				$last-checkbox: map.get($checkbox-by-index, math.max(map.keys($checkbox-by-index)...));
+				&:not(#{map.get($-checkbox-selectors, $first-checkbox)}) {
+					border-top-left-radius: 0;
+					border-bottom-left-radius: 0;
+					border-left-width: 0;
 
-				@if $buttons-grouped {
-					&:not(#{map.get($-checkbox-selectors, $last-checkbox)}) {
-						border-top-right-radius: 0;
-						border-bottom-right-radius: 0;
-					}
-
-					&:not(#{map.get($-checkbox-selectors, $first-checkbox)}) {
-						border-top-left-radius: 0;
-						border-bottom-left-radius: 0;
-						border-left-width: 0;
-
-						// Remove space between consecutive grouped buttons.
-						margin-inline-start: -$-space !important;
-					}
-				} @else {
-					&:not(#{map.get($-checkbox-selectors, $first-checkbox)}) {
-						// Move non-grouped buttons closer to each other.
-						margin-inline-start: -1 * math.div($-space, 2) !important;
-					}
+					// Remove space between consecutive grouped buttons.
+					margin-inline-start: -$-space !important;
+				}
+			} @else {
+				&:not(#{map.get($-checkbox-selectors, $first-checkbox)}) {
+					// Move non-grouped buttons closer to each other.
+					margin-inline-start: -1 * math.div($-space, 2) !important;
 				}
 			}
 		}
+	}
 
-		/* Description */
+	// MARK: Order
 
-		// Hide empty description element.
-		description.findbar-label:empty {
-			display: none;
-		}
-
-		/* Order */
-
+	findbar {
 		[anonid='findbar-textbox-wrapper'] {
 			order: list.index($order, TEXT_BOX) - 1;
 		}
@@ -328,13 +302,37 @@ $-space: 8px;
 		description.findbar-label {
 			order: list.index($order, DESCRIPTION) - 1;
 		}
+	}
+}
 
-		/* Close button */
+$-space: 8px;
 
-		@if ($hide-close-button) {
-			toolbarbutton.findbar-closebutton {
-				display: none;
-			}
+/// `$order` tokens that match checkboxes, mapped to the corresponding CSS selector.
+$-checkbox-selectors: (
+	CHECKBOX_HIGHLIGHT_ALL: "checkbox[anonid='highlight']",
+	CHECKBOX_MATCH_CASE: "checkbox[anonid='find-case-sensitive']",
+	CHECKBOX_MATCH_DIACRITICS: "checkbox[anonid='find-match-diacritics']",
+	CHECKBOX_WHOLE_WORDS: "checkbox[anonid='find-entire-word']",
+);
+
+/// Makes a CSS `var()` expression that references a variable and any fallbacks, in the specified
+/// order.
+///
+/// @example scss Variable without fallback
+///     @debug -var(a);
+///     // Prints var(--a)
+///
+/// @example scss Variable with fallbacks
+///     @debug -var(a, b, c);
+///     // var(--a, var(--b, var(--c)))
+@function -var($names...) {
+	$css: '';
+	@for $i from list.length($names) through 1 {
+		@if $css == '' {
+			$css: 'var(--' + list.nth($names, $i) + ')';
+		} @else {
+			$css: 'var(--' + list.nth($names, $i) + ', ' + $css + ')';
 		}
 	}
+	@return $css;
 }
