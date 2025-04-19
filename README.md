@@ -29,12 +29,18 @@ adjusting spacing and styling its elements.
 If `true`, detaches the find bar from the toolbar, and positions it floating above the contents of
 web page,
 
-![](./img/feature-floating-true.png)
+<picture>
+   <source media="(prefers-color-scheme: dark)" srcset="./img/feature-float-true.dark.png">
+   <img src="./img/feature-float-true.light.png">
+</picture>
 
 If `false`, positions the find bar towards the top right-hand corner of the browser window, docked
 to the toolbar,
 
-![](./img/feature-floating-false.png)
+<picture>
+   <source media="(prefers-color-scheme: dark)" srcset="./img/feature-float-false.dark.png">
+   <img src="./img/feature-float-false.light.png">
+</picture>
 
 </td>
 </tr>
@@ -66,11 +72,17 @@ Distance between the floating find bar and the respective window corner.
 
 If `true`, styles the find bar checkboxes to resemble buttons,
 
-![](./img/feature-buttons-true.png)
+<picture>
+   <source media="(prefers-color-scheme: dark)" srcset="./img/feature-buttons-true.dark.png">
+   <img src="./img/feature-buttons-true.light.png">
+</picture>
 
 If `false`, leaves them as is,
 
-![](./img/feature-buttons-false.png)
+<picture>
+   <source media="(prefers-color-scheme: dark)" srcset="./img/feature-buttons-false.dark.png">
+   <img src="./img/feature-buttons-false.light.png">
+</picture>
 
 </td>
 </tr>
@@ -82,7 +94,10 @@ If `false`, leaves them as is,
 
 If `true`, groups find bar buttons together,
 
-![](./img/feature-buttons-grouped.png)
+<picture>
+   <source media="(prefers-color-scheme: dark)" srcset="./img/feature-buttons-grouped.dark.png">
+   <img src="./img/feature-buttons-grouped.light.png">
+</picture>
 
 </td>
 </tr>
@@ -100,7 +115,10 @@ If `true`, hides the close button.
 > its textbox or buttons are focused. To focus the textbox, press the find shortcut
 > <kbd>Ctrl/Cmd</kbd>+<kbd>F</kbd>.
 
-![](./img/feature-hide-close-button-true.png)
+<picture>
+   <source media="(prefers-color-scheme: dark)" srcset="./img/feature-hide-close-button.dark.png">
+   <img src="./img/feature-hide-close-button.light.png">
+</picture>
 
 </td>
 </tr>
@@ -145,7 +163,10 @@ order: `TEXT_BOX`, `CHECKBOX_HIGHLIGHT_ALL`, `CHECKBOX_MATCH_CASE`, `CHECKBOX_MA
 e.g., If the order is specified as `DESCRIPTION`, `LABELS`, `TEXT_BOX`, `CHECKBOX_HIGHLIGHT_ALL`,
 `CHECKBOX_MATCH_CASE`, `CHECKBOX_WHOLE_WORDS`, `CHECKBOX_MATCH_DIACRITICS`,
 
-![](./img/feature-buttons-order.png)
+<picture>
+   <source media="(prefers-color-scheme: dark)" srcset="./img/feature-order.dark.png">
+   <img src="./img/feature-order.light.png">
+</picture>
 
 </td>
 </tr>
