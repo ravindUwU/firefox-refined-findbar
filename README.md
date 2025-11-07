@@ -193,8 +193,7 @@ This style is authored as an [SCSS mixin][sassMixin] and must be transpiled to C
   <details>
   <summary>If that didn't work,</summary>
 
-  1. Open an online transpiler (e.g., [Sass Playground][sassPlay] or
-     [SassMeister](https://www.sassmeister.com/)).
+  1. Open an online transpiler (e.g., [Sass Playground][sassPlay]).
 
   2. Copy the contents of [`refined-findbar.scss`][src] into the SCSS pane.
 
