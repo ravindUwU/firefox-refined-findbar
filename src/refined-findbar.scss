@@ -82,7 +82,7 @@
 			display: none;
 		}
 
-		@if ($hide-close-button) {
+		@if $hide-close-button {
 			toolbarbutton.findbar-closebutton {
 				display: none;
 			}
@@ -142,7 +142,7 @@
 
 	// MARK: Hide when unfocused
 
-	@if ($hide-when-unfocused) {
+	@if $hide-when-unfocused {
 		@keyframes refined-findbar-hide-when-unfocused {
 			// Prolong opacity & height during animation.
 			0% {
