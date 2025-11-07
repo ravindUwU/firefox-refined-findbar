@@ -170,7 +170,7 @@
 
 	// MARK: Opacity when unfocused
 
-	@if ($opacity-when-unfocused < 1) {
+	@if $opacity-when-unfocused < 1 and not $hide-when-unfocused {
 		findbar {
 			transition: opacity 0.1s;
 			opacity: 1;
