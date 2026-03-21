@@ -268,7 +268,7 @@
 				background-color: #{-var(button-background-color-active, button-active-bgcolor)};
 			}
 
-			&[checked='true'] {
+			&[checked] {
 				color: #{-var(button-text-color-primary, button-primary-color)};
 				background-color: #{-var(color-accent-primary, button-primary-bgcolor)};
 
