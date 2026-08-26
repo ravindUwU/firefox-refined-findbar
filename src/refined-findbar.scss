@@ -58,6 +58,31 @@
 		// absolutely position the findbar within it.
 		position: absolute;
 
+		/*
+			Firefox 155 places the findbar in a CSS grid in which the content of the web page is
+			placed in a "browserstack" area; and the findbar, in an adjacent "findbar" area in a grid
+			row below the browserstack. Roughly,
+
+				With dev tools docked below the browser,
+					| browserstack |
+					|--------------|
+					| findbar      |
+					|--------------|
+					| devtools     |
+
+				With dev tools docked to the side,
+					| browserstack |          |
+					|--------------| devtools |
+					| findbar      |          |
+
+			This causes the `position: absolute` apply within the bounds of the "findbar" area, so
+			`top: 0` places a top-aligned findbar, invisibly below the browser.
+
+			Fix this for 155 by placing the findbar in the same area occupied by the web content.
+			This is 154-compatible, because the parent isn't a CSS grid, so grid-area has no effect.
+		*/
+		grid-area: browserstack !important;
+
 		@if $float {
 			// Top or bottom align the floating findbar.
 			right: $float-distance;
