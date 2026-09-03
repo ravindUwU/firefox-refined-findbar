@@ -175,7 +175,11 @@
 	}
 
 	findbar {
-		transform-origin: if($float, $float-alignment, top) center;
+		@if $float {
+			transform-origin: $float-alignment center;
+		} @else {
+			transform-origin: top center;
+		}
 
 		// Scale in when shown, out when hidden.
 		animation: refined-findbar-scale-in 0.1s;
@@ -272,7 +276,10 @@
 	// Instead, identify the first & last checkboxes via their position in $order.
 	$checkbox-by-index: ();
 	@each $name in map.keys($-checkbox-selectors) {
-		$checkbox-by-index: map.set($checkbox-by-index, list.index($order, $name), $name);
+		$index: list.index($order, $name);
+		@if $index {
+			$checkbox-by-index: map.set($checkbox-by-index, $index, $name);
+		}
 	}
 	$first-checkbox: map.get($checkbox-by-index, math.min(map.keys($checkbox-by-index)...));
 	$last-checkbox: map.get($checkbox-by-index, math.max(map.keys($checkbox-by-index)...));
@@ -351,22 +358,34 @@
 	// MARK: Order
 
 	findbar {
+		$index: list.index($order, TEXT_BOX);
 		[anonid='findbar-textbox-wrapper'] {
-			order: list.index($order, TEXT_BOX) - 1;
-		}
-
-		@each $name, $selector in $-checkbox-selectors {
-			#{$selector} {
-				order: list.index($order, $name) - 1;
+			@if $index {
+				order: $index - 1;
 			}
 		}
 
-		label.findbar-label {
-			order: list.index($order, LABELS) - 1;
+		@each $name, $selector in $-checkbox-selectors {
+			$index: list.index($order, $name);
+			@if $index {
+				#{$selector} {
+					order: $index - 1;
+				}
+			}
 		}
 
+		$index: list.index($order, LABELS);
+		label.findbar-label {
+			@if $index {
+				order: $index - 1;
+			}
+		}
+
+		$index: list.index($order, DESCRIPTION);
 		description.findbar-label {
-			order: list.index($order, DESCRIPTION) - 1;
+			@if $index {
+				order: $index - 1;
+			}
 		}
 	}
 
