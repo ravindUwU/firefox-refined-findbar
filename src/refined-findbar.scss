@@ -11,6 +11,8 @@
 		$buttons: true,
 		$buttons-grouped: true,
 
+		$chrome-findbar: false,
+
 		$hide-close-button: false,
 		$hide-when-unfocused: false,
 		$opacity-when-unfocused: 1,
@@ -37,6 +39,8 @@
 
 			$buttons: #{$buttons},
 			$buttons-grouped: #{$buttons-grouped},
+
+			$chrome-findbar: #{$chrome-findbar},
 
 			$hide-close-button: #{$hide-close-button},
 			$hide-when-unfocused: #{$hide-when-unfocused},
@@ -351,6 +355,79 @@
 			}
 			&:is(#{map.get($-checkbox-selectors, $last-checkbox)}) {
 				margin-inline-end: math.div($-space, 2) !important;
+			}
+		}
+	}
+
+	// MARK: Chrome find bar
+
+	@if $chrome-findbar {
+		$prev-next-width: 28px;
+
+		findbar {
+			// Mimic the Chrome find bar: hide all checkboxes, and overlay the match count & find
+			// status onto the text box, so displaying results doesn't resize the text box.
+
+			// Hiding the checkboxes shrinks the find bar, so keep it wide enough for the text box
+			// & the overlaid status text.
+			min-width: 400px;
+
+			// Findbar controls live within an hbox.findbar-container. Make it the containing block
+			// for the overlaid labels.
+			.findbar-container {
+				position: relative;
+
+				checkbox {
+					display: none;
+				}
+
+				// Overlay the match count & find status onto the text box.
+				label.findbar-label,
+				description.findbar-label {
+					position: absolute;
+					top: 50%;
+					transform: translateY(-50%);
+
+					// Clear the prev & next buttons (2 × $prev-next-width), which follow the text
+					// box inside its wrapper. Quick find mode hides those buttons, in which case
+					// the text box extends to the right edge of the findbar.
+					inset-inline-end: 2 * $prev-next-width;
+
+					// Keep the overlay clear of the prev button.
+					padding-inline-end: 6px;
+					white-space: nowrap;
+
+					// Don't block clicks on the text box.
+					pointer-events: none;
+					z-index: 1;
+				}
+
+				// Quick find mode: no prev & next buttons, so the overlay sits at the right edge of
+				// the text box.
+				&:has(htmlNs|input.minimal) label.findbar-label,
+				&:has(htmlNs|input.minimal) description.findbar-label {
+					inset-inline-end: 0;
+				}
+
+				// Make the prev & next buttons a known width, so the overlay position above is
+				// predictable. Also reset the text box margins & give it right padding, so typed
+				// text doesn't reach the overlay.
+				[anonid='findbar-textbox-wrapper'] {
+					gap: 0;
+
+					& > * {
+						margin-inline: 0 !important;
+					}
+
+					toolbarbutton {
+						box-sizing: border-box;
+						width: $prev-next-width;
+					}
+
+					htmlNs|input {
+						padding-inline-end: 2.5em;
+					}
+				}
 			}
 		}
 	}
