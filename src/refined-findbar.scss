@@ -159,7 +159,11 @@
 	}
 
 	findbar {
-		transform-origin: if($float, $float-alignment, top) center;
+		@if $float {
+			transform-origin: $float-alignment center;
+		} @else {
+			transform-origin: top center;
+		}
 
 		// Scale in when shown, out when hidden.
 		animation: refined-findbar-scale-in 0.1s;
