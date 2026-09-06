@@ -104,6 +104,17 @@ If `true`, groups find bar buttons together,
 
 <!-- -->
 <tr>
+<td valign="top"><code>$chrome-findbar</code></td>
+<td valign="top">
+
+If `true`, mimics the Chrome find bar by hiding all checkboxes, and overlaying the match count &
+find status onto the text box, so that displaying results doesn't resize the text box,
+
+</td>
+</tr>
+
+<!-- -->
+<tr>
 <td valign="top"><code>$hide-close-button</code></td>
 <td valign="top">
 
