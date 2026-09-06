@@ -185,8 +185,9 @@ This style is authored as an [SCSS mixin][sassMixin] and must be transpiled to C
   1. Visit https://ravindUwU.github.io/firefox-refined-findbar, which will automatically generate a
      link to the [Sass Playground][sassPlay].
 
-  2. Visit the generated link, modify the SCSS as necessary (specifically, the highlighted
-     `@include` statement).
+  2. Visit the generated link, scroll _all the way down_ to the `// TODO: Continue here` line of the
+     SCSS source, and modify the parameters of the `@include refined-findbar()` statement below it,
+     as necessary.
 
   3. Copy the CSS output into your `userChrome.css` file and restart Firefox.
 
