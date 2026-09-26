@@ -7,10 +7,7 @@
 		{
 			"files": [".vscode/*.json"],
 			"options": {
-				"parser": "json5",
-				"trailingComma": "all",
-				"quoteProps": "preserve",
-				"singleQuote": false
+				"parser": "jsonc"
 			}
 		}
 	]
