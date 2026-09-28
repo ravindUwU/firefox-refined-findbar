@@ -3,9 +3,10 @@
 	"singleQuote": true,
 	"proseWrap": "always",
 	"endOfLine": "auto",
+	"experimentalOperatorPosition": "start",
 	"overrides": [
 		{
-			"files": [".vscode/*.json"],
+			"files": [".vscode/*.json", "**/tsconfig.json", "**/tsconfig.*.json"],
 			"options": {
 				"parser": "jsonc"
 			}

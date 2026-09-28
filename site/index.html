@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<title>Firefox Refined Findbar</title>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="stylesheet" href="index.css" />
+	</head>
+	<body>
+		<div id="root">
+			<!-- MARK: Chrome -->
+			<div id="chrome">
+				<div class="header">
+					<div class="toolbar tabs">
+						<div class="control tab"></div>
+						<div class="control tab"></div>
+						<div class="control tab"></div>
+					</div>
+					<div class="toolbar">
+						<div class="control"></div>
+						<div class="control"></div>
+						<div class="control"></div>
+						<div class="control spacer"></div>
+						<div class="control address"></div>
+						<div class="control spacer"></div>
+						<div class="control spacer"></div>
+						<div class="control"></div>
+					</div>
+				</div>
+
+				<div class="content">
+					<!-- MARK: Content -->
+					<main>
+						<div class="group">
+							<div>
+								<label>
+									<input type="checkbox" id="opt-float" />
+									Float
+								</label>
+							</div>
+							<div class="indent">
+								Placement:
+								<label>
+									<input type="radio" name="opt-float-align" value="top" id="opt-float-align-top" />
+									Top
+								</label>
+								<label>
+									<input
+										type="radio"
+										name="opt-float-align"
+										value="bottom"
+										id="opt-float-align-bottom"
+									/>
+									Bottom
+								</label>
+							</div>
+							<div class="indent">
+								Distance from corner:
+								<input type="number" id="opt-float-distance" min="0" max="100" />
+								px
+							</div>
+						</div>
+
+						<div class="group">
+							<div>
+								<label>
+									<input type="checkbox" id="opt-buttons" />
+									Restyle checkboxes as buttons
+								</label>
+							</div>
+							<div class="indent">
+								<label>
+									<input type="checkbox" id="opt-buttons-grouped" />
+									Grouped adjacent buttons together
+								</label>
+							</div>
+						</div>
+
+						<div class="group">
+							<label>
+								<input type="checkbox" id="opt-hide-close" />
+								Hide the close button
+							</label>
+						</div>
+
+						<div class="group">
+							<div>
+								When unfocused:
+								<select id="opt-when-unfocused">
+									<option value="nothing">Do nothing</option>
+									<option value="hide">Hide findbar</option>
+									<option value="opacity">De-emphasize findbar</option>
+								</select>
+							</div>
+							<div class="indent">
+								Opacity:
+								<input type="number" id="opt-opacity-when-unfocused" min="0" max="100" disabled /> %
+							</div>
+						</div>
+
+						<div>
+							Main controls:
+							<div class="hint">
+								Click &amp; drag or press &uarr;/&darr; with an item focused, to reorder.
+							</div>
+							<input type="hidden" id="opt-main-controls" />
+						</div>
+
+						<div>
+							Checkboxes:
+							<div class="hint">
+								Click &amp; drag or press &uarr;/&darr; with an item focused, to reorder.
+							</div>
+							<input type="hidden" id="opt-checkbox-controls" />
+						</div>
+					</main>
+
+					<!-- MARK: Findbar -->
+					<div id="findbar">
+						<div id="findbar-controls-ordered" class="main-controls">
+							<div class="textbox" data-id="TEXT_BOX">
+								<div class="control text">Find in page</div>
+								<div class="control">
+									<i data-lucide="chevron-up"></i>
+								</div>
+								<div class="control">
+									<i data-lucide="chevron-down"></i>
+								</div>
+							</div>
+							<div id="findbar-checkboxes-ordered" class="checkboxes" data-id="CHECKBOXES">
+								<div class="control checkbox" data-id="HIGHLIGHT_ALL">Highlight All</div>
+								<div class="control checkbox" data-id="MATCH_CASE">Match Case</div>
+								<div class="control checkbox" data-id="MATCH_DIACRITICS">Match Diacritics</div>
+								<div class="control checkbox" data-id="WHOLE_WORDS">Whole Words</div>
+							</div>
+							<div class="labels" data-id="LABELS">1 of 2 matches</div>
+							<div class="description" data-id="DESCRIPTION">Phrase not found</div>
+						</div>
+						<div class="control close">
+							<i data-lucide="x"></i>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<script type="module" src="index.ts"></script>
+	</body>
+</html>
