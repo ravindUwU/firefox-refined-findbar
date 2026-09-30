@@ -134,9 +134,10 @@
 		}
 	}
 
-	// MARK: Border
+	// MARK: Colours, Border
 
 	findbar {
+		background-color: #{-var(toolbox-background-color-gradient-leading, toolbox-background-color)} !important;
 		border: 1px solid var(--chrome-content-separator-color);
 
 		@if $float {
