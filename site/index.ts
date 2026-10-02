@@ -1,4 +1,4 @@
-import { createIcons, ChevronUp, ChevronDown, X } from 'lucide';
+import { createIcons, ChevronUp, ChevronDown, X, AlertTriangle } from 'lucide';
 import { effect, signal } from './utils/signals';
 import {
 	bindCheckbox,
@@ -13,7 +13,7 @@ import {
 } from './utils/dom';
 
 createIcons({
-	icons: { ChevronUp, ChevronDown, X },
+	icons: { ChevronUp, ChevronDown, X, AlertTriangle },
 });
 
 // MARK: State
@@ -59,8 +59,13 @@ useEl('opt-buttons-grouped', (el) => {
 });
 
 bindCheckbox(hideClose, useEl('opt-hide-close'));
+bindClass(useEl('opt-hide-close-warning'), hideClose, 'shown');
 
 bindSelect(whenUnfocused, ['nothing', 'hide', 'opacity'], useEl('opt-when-unfocused'));
+
+bindClass(useEl('opt-hide-when-unfocused-warning'), whenUnfocused, (w) =>
+	w === 'hide' ? 'shown' : undefined,
+);
 
 useEl('opt-opacity-when-unfocused', (el) => {
 	bindNumber(opacityWhenUnfocused, el);

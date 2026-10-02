@@ -38,7 +38,7 @@ export function bindEnabled<T>(el: HTMLElement, signal: Signal<T>, project?: (t:
 export function bindClass<T>(
 	el: HTMLElement,
 	signal: Signal<T>,
-	classNameOrProjection: string | ((t: T) => string),
+	classNameOrProjection: string | ((t: T) => string | undefined),
 ) {
 	effect(() => {
 		const v = signal();
