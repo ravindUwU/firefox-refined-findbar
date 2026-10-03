@@ -1,5 +1,5 @@
 import { createIcons, ChevronUp, ChevronDown, X, AlertTriangle, LoaderCircle } from 'lucide';
-import { effect, signal } from './utils/signals';
+import { computed, effect, signal } from './utils/signals';
 import {
 	bindCheckbox,
 	bindClass,
@@ -23,12 +23,14 @@ createIcons({
 // user-facing default values are defined on the elements themselves.
 
 const float = signal(false);
-const floatAlignment = signal<'top' | 'bottom'>('top');
+type FloatAlignment = 'top' | 'bottom';
+const floatAlignment = signal<FloatAlignment>('top');
 const floatDistance = signal(18);
 const buttons = signal(false);
 const buttonsGrouped = signal(false);
 const hideClose = signal(false);
-const whenUnfocused = signal<'nothing' | 'hide' | 'opacity'>('nothing');
+type WhenUnfocused = 'nothing' | 'hide' | 'opacity';
+const whenUnfocused = signal<WhenUnfocused>('nothing');
 const opacityWhenUnfocused = signal(100);
 
 const _allMainControls = ['TEXT_BOX', 'CHECKBOXES', 'LABELS', 'DESCRIPTION'] as const;
@@ -121,6 +123,143 @@ useEl('findbar-checkboxes-ordered', (el) => {
 	});
 });
 
+// MARK: URL
+
+const configUrl = computed(() => {
+	const p = new URLSearchParams();
+
+	if (float()) {
+		p.set('float', `${floatAlignment()}-${floatDistance()}`);
+	}
+
+	if (buttons()) {
+		p.set('buttons', buttonsGrouped() ? 'grouped' : '');
+	}
+
+	if (hideClose()) {
+		p.set('hideClose', '');
+	}
+
+	switch (whenUnfocused()) {
+		case 'hide': {
+			p.set('when-unfocused', 'hide');
+			break;
+		}
+		case 'opacity': {
+			p.set('when-unfocused', `opacity-${opacityWhenUnfocused()}`);
+			break;
+		}
+	}
+
+	p.set('controls', mainControls().join('.'));
+	p.set('checkboxes', checkboxControls().join('.'));
+
+	const l = window.location;
+	return `${l.protocol}//${l.host}${l.pathname}?${p.toString()}`;
+});
+
+useEl('copy-link-button', (el) => {
+	el.addEventListener('click', () => {
+		const url = new URL(window.location.href);
+		for (const key of url.searchParams.keys()) {
+			url.searchParams.delete(key);
+		}
+		navigator.clipboard.writeText(configUrl());
+	});
+});
+
+tryRestoreUrlState();
+window.addEventListener('hashchange', tryRestoreUrlState);
+
+function tryRestoreUrlState() {
+	const loc = window.location;
+	const p = new URLSearchParams(loc.search);
+	if (p.size === 0) {
+		return;
+	}
+
+	ifMatch(p.get('float'), /^(?<alignment>top|bottom)-(?<distance>\d+)$/, {
+		then(e) {
+			float(true);
+			floatAlignment(e.groups?.['alignment'] as FloatAlignment);
+			floatDistance(+(e.groups?.['distance'] ?? 0));
+		},
+		else() {
+			float(false);
+			floatAlignment('top');
+			floatDistance(18);
+		},
+	});
+
+	if (p.has('buttons')) {
+		buttons(true);
+		if (p.get('buttons') === 'grouped') {
+			buttonsGrouped(true);
+		}
+	} else {
+		buttons(false);
+		buttonsGrouped(false);
+	}
+
+	hideClose(p.has('hideClose'));
+
+	ifMatch(p.get('when-unfocused'), /^((?<mode>hide)|(?<mode>opacity)-(?<opacity>\d+))$/, {
+		then(e) {
+			const mode = e.groups?.['mode'] as WhenUnfocused;
+			whenUnfocused(mode);
+			opacityWhenUnfocused(mode === 'opacity' ? +(e.groups?.['opacity'] ?? 0) : 100);
+		},
+		else() {
+			whenUnfocused('nothing');
+			opacityWhenUnfocused(100);
+		},
+	});
+
+	{
+		const controls = (p.get('controls') ?? '').split('.');
+		if (
+			new Set(controls).size === _allMainControls.length
+			&& controls.every((c) => _allMainControls.includes(c as MainControl))
+		) {
+			mainControls(controls as MainControl[]);
+		} else {
+			mainControls([..._allMainControls]);
+		}
+	}
+
+	{
+		const checkboxes = (p.get('checkboxes') ?? '').split('.');
+		if (
+			new Set(checkboxes).size === _allCheckboxControls.length
+			&& checkboxes.every((c) => _allCheckboxControls.includes(c as CheckboxControl))
+		) {
+			checkboxControls(checkboxes as CheckboxControl[]);
+		} else {
+			checkboxControls([..._allCheckboxControls]);
+		}
+	}
+
+	// Drop search params from the URL.
+	history.replaceState(null, '', `${loc.protocol}//${loc.host}${loc.pathname}`);
+
+	function ifMatch(
+		s: string | null,
+		r: RegExp,
+		logic: { then: (match: RegExpExecArray) => void; else: () => void },
+	) {
+		if (s === null) {
+			logic.else();
+			return;
+		}
+		const e = r.exec(s);
+		if (e === null) {
+			logic.else();
+			return;
+		}
+		logic.then(e);
+	}
+}
+
 // MARK: Compile
 
 const compilation = signal<{
@@ -135,11 +274,11 @@ const compilation = signal<{
 	});
 })();
 
-useEl(['compiler-loading', 'compiler-buttons'], ([loadingEl, buttonsEl]) => {
+useEl(['compiler-loading', 'compiler-loaded'], ([loadingEl, loadedEl]) => {
 	effect(() => {
 		if (compilation() !== undefined) {
 			loadingEl.classList.remove('shown');
-			buttonsEl.classList.add('shown');
+			loadedEl.classList.add('shown');
 		}
 	});
 });
@@ -188,7 +327,7 @@ useEl('download-button', (el) => {
 			alertColor: false,
 		});
 
-		css = css.trim() + '\n';
+		css = `/* Config: ${configUrl()} */\n\n` + css.trim() + '\n';
 
 		// Download as userChrome.refined-findbar.css.
 		// https://stackoverflow.com/a/79383186

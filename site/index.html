@@ -189,12 +189,17 @@
 		</div>
 
 		<br />
-		<div id="compiler-loading" class="hidden shown">
-			<i data-lucide="loader-circle" class="spinning"></i>
-			Loading compiler...
-		</div>
-		<div id="compiler-buttons" class="hidden">
-			<button id="download-button">Download <code>userChrome.refined-findbar.css</code></button>
+		<div id="compiler-buttons">
+			<button id="download-button">
+				<span id="compiler-loading" class="hidden shown">
+					<i data-lucide="loader-circle" class="spinning"></i>
+					Loading compiler...
+				</span>
+				<span id="compiler-loaded" class="hidden">
+					Download <code>userChrome.refined-findbar.css</code>
+				</span>
+			</button>
+			<button id="copy-link-button">Copy link to this configuration</button>
 		</div>
 
 		<!-- MARK: Usage -->
@@ -269,8 +274,12 @@
 				<h2>Updating refined findbar</h2>
 				<ol>
 					<li>
-						Download a new <code>userChrome.refined-findbar.css</code> from this site and move it
-						next to <code>userChrome.css</code>, replacing the older version.
+						Download a new <code>userChrome.refined-findbar.css</code> from this page and move it
+						next to <code>userChrome.css</code>, replacing the old version. If the old version was
+						downloaded from this page, a link to the same configuration should be available in a
+						comment at the top of the file.
+						<br />
+						<code style="margin-left: 2em">/* Config: ... */</code>
 					</li>
 					<li>Restart Firefox to see the changes take effect.</li>
 				</ol>
@@ -295,7 +304,7 @@
 							/* @import url(./userChrome.refined-findbar.css); */
 						</code>
 					</li>
-					<li>Restart Firefox and continue browing with those styles disabled.</li>
+					<li>Restart Firefox and continue browsing with those styles disabled.</li>
 					<li>
 						Once the fixed styles are available, replace the corresponding <code>.css</code> file
 						(in this case, <code>userChrome.refined-findbar.css</code>) and uncomment the
