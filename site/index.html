@@ -35,19 +35,29 @@
 			</div>
 
 			<div class="content">
-				<!-- MARK: Content -->
+				<!-- MARK: Options -->
+				<!--
+					DEFAULTS: The <input> values are the user-facing defaults, restored to the
+					corresponding signals after the page loads.
+				-->
 				<main>
 					<section>
 						<div>
 							<label>
-								<input type="checkbox" id="opt-float" />
+								<input type="checkbox" id="opt-float" checked />
 								Float
 							</label>
 						</div>
 						<div class="indent">
 							Placement:
 							<label>
-								<input type="radio" name="opt-float-align" value="top" id="opt-float-align-top" />
+								<input
+									type="radio"
+									name="opt-float-align"
+									value="top"
+									id="opt-float-align-top"
+									checked
+								/>
 								Top
 							</label>
 							<label>
@@ -62,7 +72,7 @@
 						</div>
 						<div class="indent">
 							Distance from corner:
-							<input type="number" id="opt-float-distance" min="0" max="100" />
+							<input type="number" id="opt-float-distance" min="0" max="100" value="18" />
 							px
 						</div>
 					</section>
@@ -70,13 +80,13 @@
 					<section>
 						<div>
 							<label>
-								<input type="checkbox" id="opt-buttons" />
+								<input type="checkbox" id="opt-buttons" checked />
 								Restyle checkboxes as buttons
 							</label>
 						</div>
 						<div class="indent">
 							<label>
-								<input type="checkbox" id="opt-buttons-grouped" />
+								<input type="checkbox" id="opt-buttons-grouped" checked />
 								Grouped adjacent buttons together
 							</label>
 						</div>
@@ -99,14 +109,22 @@
 						<div>
 							When unfocused:
 							<select id="opt-when-unfocused">
-								<option value="nothing">Do nothing</option>
+								<option value="nothing" selected>Do nothing</option>
 								<option value="hide">Hide findbar</option>
 								<option value="opacity">De-emphasize findbar</option>
 							</select>
 						</div>
 						<div class="indent">
 							Opacity:
-							<input type="number" id="opt-opacity-when-unfocused" min="0" max="100" disabled /> %
+							<input
+								type="number"
+								id="opt-opacity-when-unfocused"
+								min="0"
+								max="100"
+								value="100"
+								disabled
+							/>
+							%
 						</div>
 						<div class="warning indent hidden" id="opt-hide-when-unfocused-warning">
 							<span class="header"><i data-lucide="alert-triangle"></i> Important:</span> Press
@@ -118,19 +136,27 @@
 					<div>
 						Main controls:
 						<div class="hint">
-							Click &amp; drag or press <kbd>&uarr;</kbd>/<kbd>&darr;</kbd> with an item focused, to
-							reorder.
+							Click &amp; drag, or press <kbd>&uarr;</kbd>/<kbd>&darr;</kbd> with an item focused,
+							to reorder them.
 						</div>
-						<input type="hidden" id="opt-main-controls" />
+						<input
+							type="hidden"
+							id="opt-main-controls"
+							value="TEXT_BOX,CHECKBOXES,LABELS,DESCRIPTION"
+						/>
 					</div>
 
 					<div>
 						Checkboxes:
 						<div class="hint">
-							Click &amp; drag or press <kbd>&uarr;</kbd>/<kbd>&darr;</kbd> with an item focused, to
-							reorder.
+							Click &amp; drag, or press <kbd>&uarr;</kbd>/<kbd>&darr;</kbd> with an item focused,
+							to reorder them.
 						</div>
-						<input type="hidden" id="opt-checkbox-controls" />
+						<input
+							type="hidden"
+							id="opt-checkbox-controls"
+							value="HIGHLIGHT_ALL,MATCH_CASE,MATCH_DIACRITICS,WHOLE_WORDS"
+						/>
 					</div>
 				</main>
 

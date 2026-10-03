@@ -19,7 +19,10 @@ createIcons({
 
 // MARK: State
 
-const float = signal(true);
+// DEFAULTS: The bind* functions restore signal values from the corresponding elements. The
+// user-facing default values are defined on the elements themselves.
+
+const float = signal(false);
 const floatAlignment = signal<'top' | 'bottom'>('top');
 const floatDistance = signal(18);
 const buttons = signal(false);
@@ -37,7 +40,7 @@ const _allCheckboxControls = ['HIGHLIGHT_ALL', 'MATCH_CASE', 'MATCH_DIACRITICS',
 type CheckboxControl = (typeof _allCheckboxControls)[number];
 const checkboxControls = signal<CheckboxControl[]>([..._allCheckboxControls]);
 
-// MARK: Bind
+// MARK: Bind options
 
 bindCheckbox(float, useEl('opt-float'));
 
@@ -87,7 +90,8 @@ bindReorderableList(checkboxControls, useEl('opt-checkbox-controls'), {
 	WHOLE_WORDS: 'Whole Words',
 });
 
-// Findbar
+// MARK: Bind findbar
+
 useEl('findbar', (el) => {
 	bindClass(el, float, 'opt-float');
 	bindClass(el, floatAlignment, (alignment) => `opt-float-${alignment}`);
