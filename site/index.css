@@ -68,6 +68,23 @@ ul.reorderable {
 	}
 }
 
+.hidden:not(.shown) {
+	display: none !important;
+}
+
+.spinning {
+	animation: spinningKeyframes 1s linear infinite;
+}
+
+@keyframes spinningKeyframes {
+	0% {
+		transform: rotate(0deg);
+	}
+	0% {
+		transform: rotate(-360deg);
+	}
+}
+
 /** MARK: Chrome */
 
 #chrome {
@@ -324,9 +341,18 @@ main {
 			color: var(--warn);
 			font-weight: 600;
 		}
-
-		&.hidden:not(.shown) {
-			display: none;
-		}
 	}
+}
+
+/* MARK: Compiler */
+
+#compiler-loading {
+	text-align: center;
+}
+
+#compiler-buttons {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 12px;
 }
