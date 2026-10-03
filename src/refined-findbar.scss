@@ -2,30 +2,28 @@
 @use 'sass:math';
 @use 'sass:map';
 
-@mixin /* sig:start */
-	refined-findbar(
-		$float: true,
-		$float-alignment: bottom,
-		$float-distance: 18px,
+@mixin refined-findbar(
+	$float: true,
+	$float-alignment: bottom,
+	$float-distance: 18px,
 
-		$buttons: true,
-		$buttons-grouped: true,
+	$buttons: true,
+	$buttons-grouped: true,
 
-		$hide-close-button: false,
-		$hide-when-unfocused: false,
-		$opacity-when-unfocused: 1,
+	$hide-close-button: false,
+	$hide-when-unfocused: false,
+	$opacity-when-unfocused: 1,
 
-		$order: (
-			TEXT_BOX,
-			CHECKBOX_HIGHLIGHT_ALL,
-			CHECKBOX_MATCH_CASE,
-			CHECKBOX_MATCH_DIACRITICS,
-			CHECKBOX_WHOLE_WORDS,
-			LABELS,
-			DESCRIPTION,
-		)
+	$order: (
+		TEXT_BOX,
+		CHECKBOX_HIGHLIGHT_ALL,
+		CHECKBOX_MATCH_CASE,
+		CHECKBOX_MATCH_DIACRITICS,
+		CHECKBOX_WHOLE_WORDS,
+		LABELS,
+		DESCRIPTION,
 	)
-	/* sig:end */ {
+) {
 	/*
 		Refined Findbar
 		https://github.com/ravindUwU/firefox-refined-findbar
