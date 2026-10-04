@@ -8,3 +8,7 @@ trim_trailing_whitespace = true
 
 [*.md]
 indent_style = unset
+
+[*.yaml]
+indent_style = space # yuck
+indent_size = 4

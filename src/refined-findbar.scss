@@ -2,48 +2,31 @@
 @use 'sass:math';
 @use 'sass:map';
 
-@mixin /* sig:start */
-	refined-findbar(
-		$float: true,
-		$float-alignment: bottom,
-		$float-distance: 18px,
+@mixin refined-findbar(
+	$float: true,
+	$float-alignment: bottom,
+	$float-distance: 18px,
 
-		$buttons: true,
-		$buttons-grouped: true,
+	$buttons: true,
+	$buttons-grouped: true,
 
-		$hide-close-button: false,
-		$hide-when-unfocused: false,
-		$opacity-when-unfocused: 1,
+	$hide-close-button: false,
+	$hide-when-unfocused: false,
+	$opacity-when-unfocused: 1,
 
-		$order: (
-			TEXT_BOX,
-			CHECKBOX_HIGHLIGHT_ALL,
-			CHECKBOX_MATCH_CASE,
-			CHECKBOX_MATCH_DIACRITICS,
-			CHECKBOX_WHOLE_WORDS,
-			LABELS,
-			DESCRIPTION,
-		)
+	$order: (
+		TEXT_BOX,
+		CHECKBOX_HIGHLIGHT_ALL,
+		CHECKBOX_MATCH_CASE,
+		CHECKBOX_MATCH_DIACRITICS,
+		CHECKBOX_WHOLE_WORDS,
+		LABELS,
+		DESCRIPTION,
 	)
-	/* sig:end */ {
+) {
 	/*
 		Refined Findbar
 		https://github.com/ravindUwU/firefox-refined-findbar
-
-		@include refined-findbar(
-			$float: #{$float},
-			$float-alignment: #{$float-alignment},
-			$float-distance: #{$float-distance},
-
-			$buttons: #{$buttons},
-			$buttons-grouped: #{$buttons-grouped},
-
-			$hide-close-button: #{$hide-close-button},
-			$hide-when-unfocused: #{$hide-when-unfocused},
-			$opacity-when-unfocused: #{$opacity-when-unfocused},
-
-			$order: (#{$order})
-		)
 	*/
 
 	@namespace url('http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul');
