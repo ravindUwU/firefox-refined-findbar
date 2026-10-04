@@ -1,6 +1,8 @@
 import { defineConfig } from 'vite';
+import { env } from 'node:process';
 
 export default defineConfig({
+	base: env['VITE_BASE'],
 	build: {
 		// Build referenced assets as siblings of index.html; not within a separate assets directory.
 		assetsDir: '.',

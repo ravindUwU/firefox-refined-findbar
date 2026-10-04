@@ -10,6 +10,12 @@
 			"options": {
 				"parser": "jsonc"
 			}
+		},
+		{
+			"files": ["**/*.yaml"],
+			"options": {
+				"tabWidth": 4
+			}
 		}
 	]
 }
