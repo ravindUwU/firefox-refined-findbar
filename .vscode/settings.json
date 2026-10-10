@@ -1,7 +1,12 @@
 {
 	"files.exclude": {
-		"**/node_modules": true,
+		"**/node_modules/": true,
 	},
+	"files.readonlyInclude": {
+		"**/node_modules/**": true,
+		"**/pnpm-lock.yaml": true,
+	},
+
 	"editor.defaultFormatter": "esbenp.prettier-vscode",
 	"editor.formatOnSave": true,
 	"files.trimFinalNewlines": true,

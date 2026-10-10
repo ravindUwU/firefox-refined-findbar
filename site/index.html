@@ -1,0 +1,338 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<title>Firefox Refined Findbar</title>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="stylesheet" href="index.css" />
+	</head>
+	<body>
+		<h1>Refined Findbar</h1>
+		<p>
+			<a href="https://github.com/ravindUwU/firefox-refined-findbar">Repo</a>
+			| <a href="https://github.com/ravindUwU/firefox-refined-findbar/issues">Issues</a>
+		</p>
+		<br /><br />
+
+		<!-- MARK: Chrome -->
+		<div id="chrome">
+			<div class="header">
+				<div class="toolbar tabs">
+					<div class="control tab"></div>
+					<div class="control tab"></div>
+					<div class="control tab"></div>
+				</div>
+				<div class="toolbar">
+					<div class="control"></div>
+					<div class="control"></div>
+					<div class="control"></div>
+					<div class="control spacer"></div>
+					<div class="control address"></div>
+					<div class="control spacer"></div>
+					<div class="control spacer"></div>
+					<div class="control"></div>
+				</div>
+			</div>
+
+			<div class="content">
+				<!-- MARK: Options -->
+				<!--
+					DEFAULTS: The <input> values are the user-facing defaults, restored to the
+					corresponding signals after the page loads.
+				-->
+				<main>
+					<section>
+						<div>
+							<label>
+								<input type="checkbox" id="opt-float" checked />
+								Float
+							</label>
+						</div>
+						<div class="indent">
+							Placement:
+							<label>
+								<input
+									type="radio"
+									name="opt-float-align"
+									value="top"
+									id="opt-float-align-top"
+									checked
+								/>
+								Top
+							</label>
+							<label>
+								<input
+									type="radio"
+									name="opt-float-align"
+									value="bottom"
+									id="opt-float-align-bottom"
+								/>
+								Bottom
+							</label>
+						</div>
+						<div class="indent">
+							Distance from corner:
+							<input type="number" id="opt-float-distance" min="0" max="100" value="18" />
+							px
+						</div>
+					</section>
+
+					<section>
+						<div>
+							<label>
+								<input type="checkbox" id="opt-buttons" checked />
+								Restyle checkboxes as buttons
+							</label>
+						</div>
+						<div class="indent">
+							<label>
+								<input type="checkbox" id="opt-buttons-grouped" checked />
+								Grouped adjacent buttons together
+							</label>
+						</div>
+					</section>
+
+					<section>
+						<label>
+							<input type="checkbox" id="opt-chrome-findbar" />
+							Mimic the Chrome find bar
+						</label>
+						<div class="hint indent">
+							Hides the checkboxes, and overlays the match count &amp; find status onto the text
+							box, so displaying results doesn't resize the text box.
+						</div>
+					</section>
+
+					<section>
+						<label>
+							<input type="checkbox" id="opt-hide-close" />
+							Hide the close button
+						</label>
+						<div class="warning indent hidden" id="opt-hide-close-warning">
+							<span class="header"><i data-lucide="alert-triangle"></i> Important:</span> With the
+							close button hidden, press <kbd>Esc</kbd> with its text box or controls focused, to
+							dismiss the findbar. Press <kbd>Ctrl</kbd>/<kbd>Cmd</kbd>+<kbd>F</kbd> to focus the
+							text box.
+						</div>
+					</section>
+
+					<section>
+						<div>
+							When unfocused:
+							<select id="opt-when-unfocused">
+								<option value="nothing" selected>Do nothing</option>
+								<option value="hide">Hide findbar</option>
+								<option value="opacity">De-emphasize findbar</option>
+							</select>
+						</div>
+						<div class="indent">
+							Opacity:
+							<input
+								type="number"
+								id="opt-opacity-when-unfocused"
+								min="0"
+								max="100"
+								value="100"
+								disabled
+							/>
+							%
+						</div>
+						<div class="warning indent hidden" id="opt-hide-when-unfocused-warning">
+							<span class="header"><i data-lucide="alert-triangle"></i> Important:</span> Press
+							<kbd>Ctrl</kbd>/<kbd>Cmd</kbd>+<kbd>F</kbd> to focus the text box and reveal the
+							hidden findbar, if it is unfocused.
+						</div>
+					</section>
+
+					<div>
+						Main controls:
+						<div class="hint">
+							Click &amp; drag, or press <kbd>&uarr;</kbd>/<kbd>&darr;</kbd> with an item focused,
+							to reorder them.
+						</div>
+						<input
+							type="hidden"
+							id="opt-main-controls"
+							value="TEXT_BOX,CHECKBOXES,LABELS,DESCRIPTION"
+						/>
+					</div>
+
+					<div>
+						Checkboxes:
+						<div class="hint">
+							Click &amp; drag, or press <kbd>&uarr;</kbd>/<kbd>&darr;</kbd> with an item focused,
+							to reorder them.
+						</div>
+						<input
+							type="hidden"
+							id="opt-checkbox-controls"
+							value="HIGHLIGHT_ALL,MATCH_CASE,MATCH_DIACRITICS,WHOLE_WORDS"
+						/>
+					</div>
+				</main>
+
+				<!-- MARK: Findbar -->
+				<div id="findbar">
+					<div id="findbar-controls-ordered" class="main-controls">
+						<div class="textbox" data-id="TEXT_BOX">
+							<div class="control text">Find in page</div>
+							<div class="control">
+								<i data-lucide="chevron-up"></i>
+							</div>
+							<div class="control">
+								<i data-lucide="chevron-down"></i>
+							</div>
+						</div>
+						<div id="findbar-checkboxes-ordered" class="checkboxes" data-id="CHECKBOXES">
+							<div class="control checkbox" data-id="HIGHLIGHT_ALL">Highlight All</div>
+							<div class="control checkbox" data-id="MATCH_CASE">Match Case</div>
+							<div class="control checkbox" data-id="MATCH_DIACRITICS">Match Diacritics</div>
+							<div class="control checkbox" data-id="WHOLE_WORDS">Whole Words</div>
+						</div>
+						<div class="labels" data-id="LABELS">1 of 2 matches</div>
+						<div class="description" data-id="DESCRIPTION">Phrase not found</div>
+					</div>
+					<div class="control close">
+						<i data-lucide="x"></i>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<br />
+		<div id="compiler-buttons">
+			<button id="download-button">
+				<span id="compiler-loading" class="hidden shown">
+					<i data-lucide="loader-circle" class="spinning"></i>
+					Loading compiler...
+				</span>
+				<span id="compiler-loaded" class="hidden">
+					Download <code>userChrome.refined-findbar.css</code>
+				</span>
+			</button>
+			<button id="copy-link-button">Copy link to this configuration</button>
+		</div>
+
+		<!-- MARK: Usage -->
+		<div class="prose">
+			<h1>Usage</h1>
+
+			<div class="prose">
+				<p>
+					<code>userChrome.css</code> styles allow
+					<a
+						href="https://support.mozilla.org/en-US/kb/contributors-guide-firefox-advanced-customization"
+						target="_blank"
+					>
+						advanced customisation
+					</a>
+					by applying custom styles to elements of the Firefox UI. Should you choose to customise
+					Firefox this way, you must do so
+					<u>with the understanding that these styles are inherently fragile</u>
+					because Firefox updates may change the structure of the UI in ways that are incompatible
+					with the custom styles applied.
+				</p>
+
+				<h2>Enabling <code>userChrome.css</code></h2>
+				<p>
+					Firefox doesn't load <code>userChrome.css</code> styles by default; enable them as
+					described below. This process is only required once.
+				</p>
+				<ol>
+					<li>
+						Type <code>about:config</code> into the address bar, press "Accept the Risk and
+						Continue". Search for the preference name
+						<code>toolkit.legacyUserProfileCustomizations.stylesheets</code> and double-click it to
+						set its value to <code>true</code>.
+					</li>
+					<li>
+						Type <code>about:support</code> into the address bar, locate "Profile Folder" in the
+						"Application Basics" table, and press "Open Folder".
+					</li>
+					<li>Make a folder named <code>chrome</code> within the profile folder.</li>
+					<li>
+						Make an empty file named <code>userChrome.css</code> within the
+						<code>chrome</code> folder.
+					</li>
+				</ol>
+
+				<h2>Installing refined findbar and organising <code>userChrome.css</code></h2>
+				<ol>
+					<li>
+						Download
+						<code>userChrome.refined-findbar.css</code> and move it next to
+						<code>userChrome.css</code>. I recommend organising the <code>chrome</code> folder in
+						the following structure so that styles can be individually toggled.
+						<pre style="margin-left: 2em"><code>chrome/
+	userChrome.css
+	userChrome.refined-findbar.css</code></pre>
+					</li>
+					<li>
+						Within <code>userChrome.css</code>, add an
+						<a
+							href="https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/At-rules/@import"
+							target="_blank"
+						>
+							<code>@import</code>
+						</a>
+						rule to include <code>userChrome.refined-findbar.css</code>.
+						<br />
+						<code style="margin-left: 2em">@import url(./userChrome.refined-findbar.css);</code>
+					</li>
+					<li>Restart Firefox to see the changes take effect.</li>
+				</ol>
+
+				<h2>Updating refined findbar</h2>
+				<ol>
+					<li>
+						Download a new <code>userChrome.refined-findbar.css</code> from this page and move it
+						next to <code>userChrome.css</code>, replacing the old version. If the old version was
+						downloaded from this page, a link to the same configuration should be available in a
+						comment at the top of the file.
+						<br />
+						<code style="margin-left: 2em">/* Config: ... */</code>
+					</li>
+					<li>Restart Firefox to see the changes take effect.</li>
+				</ol>
+
+				<h2>Handling breakages after a Firefox update</h2>
+				<p>
+					If you notice any breakages following a Firefox update (for example, an invisible
+					findbar),
+				</p>
+				<ol>
+					<li>
+						<a
+							href="https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Syntax/Comments"
+							target="_blank"
+						>
+							Comment out
+						</a>
+						the incompatible <code>@import</code> rules in <code>userChrome.css</code> to disable
+						the styles.
+						<br />
+						<code style="margin-left: 2em">
+							/* @import url(./userChrome.refined-findbar.css); */
+						</code>
+					</li>
+					<li>Restart Firefox and continue browsing with those styles disabled.</li>
+					<li>
+						Once the fixed styles are available, replace the corresponding <code>.css</code> file
+						(in this case, <code>userChrome.refined-findbar.css</code>) and uncomment the
+						<code>@import</code> rule in <code>userChrome.css</code>.
+					</li>
+					<li>Restart Firefox and continue browsing with the fixed styles applied.</li>
+				</ol>
+				<p>
+					<em>
+						If the breakage is related to refined findbar and hasn't been reported already, please
+						consider creating a
+						<a href="https://github.com/ravindUwU/firefox-refined-findbar/issues">GitHub issue</a>.
+					</em>
+				</p>
+			</div>
+		</div>
+
+		<script type="module" src="index.ts"></script>
+	</body>
+</html>
